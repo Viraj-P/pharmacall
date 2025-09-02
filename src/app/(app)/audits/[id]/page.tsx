@@ -3,57 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
-
-interface AuditResult {
-  id: string;
-  audit_id: string;
-  seo_score: number;
-  technical_score: number;
-  local_score: number;
-  performance_score: number;
-  content_score: number;
-  overall_score: number;
-  seo_issues: string[];
-  technical_issues: string[];
-  local_issues: string[];
-  performance_issues: string[];
-  content_issues: string[];
-  raw_data: any;
-  created_at: string;
-}
-
-interface Audit {
-  id: string;
-  business_name: string;
-  website_url: string;
-  status: string;
-  created_at: string;
-}
 
 export default async function AuditReportPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const supabase = await getSupabaseServerClient();
-  
-  // Fetch audit data
-  const { data: audit } = await supabase
-    .from("audits")
-    .select("*")
-    .eq("id", id)
-    .single();
+  // For now, just show sample data to test routing
+  const audit = {
+    id: id,
+    business_name: "Sample Business",
+    website_url: "https://example.com",
+    status: "completed",
+    created_at: new Date().toISOString(),
+  };
 
-  if (!audit) notFound();
-
-  // Fetch audit results
-  const { data: auditResult } = await supabase
-    .from("audit_results")
-    .select("*")
-    .eq("audit_id", id)
-    .single();
-
-  // If no results in DB, use fallback data
-  const result: AuditResult = auditResult || {
+  const result = {
     id: id,
     audit_id: id,
     seo_score: 75,
@@ -95,6 +58,13 @@ export default async function AuditReportPage({ params }: { params: Promise<{ id
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-8">
+      {/* Demo Notice */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="text-blue-800 text-sm">
+          <strong>Demo Mode:</strong> This is a test page to verify routing works. ID: {id}
+        </div>
+      </div>
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{audit.business_name}</h1>
         <p className="text-gray-600 dark:text-gray-300 mt-2">{audit.website_url}</p>
@@ -150,20 +120,16 @@ export default async function AuditReportPage({ params }: { params: Promise<{ id
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Analysis of title tags, meta descriptions, headings, and more.
               </p>
-              {result.seo_issues.length > 0 ? (
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Issues Found:</h4>
-                  <ul className="space-y-1">
-                    {result.seo_issues.map((issue, index) => (
-                      <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
-                        • {issue}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <p className="text-green-600 text-sm">No SEO issues found! 🎉</p>
-              )}
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900 dark:text-white">Sample Issues:</h4>
+                <ul className="space-y-1">
+                  {result.seo_issues.map((issue, index) => (
+                    <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+                      • {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -181,20 +147,16 @@ export default async function AuditReportPage({ params }: { params: Promise<{ id
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Robots.txt, sitemap, HTTPS, mobile-friendliness, and more.
               </p>
-              {result.technical_issues.length > 0 ? (
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Issues Found:</h4>
-                  <ul className="space-y-1">
-                    {result.technical_issues.map((issue, index) => (
-                      <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
-                        • {issue}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <p className="text-green-600 text-sm">No technical issues found! 🎉</p>
-              )}
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900 dark:text-white">Sample Issues:</h4>
+                <ul className="space-y-1">
+                  {result.technical_issues.map((issue, index) => (
+                    <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+                      • {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -212,20 +174,16 @@ export default async function AuditReportPage({ params }: { params: Promise<{ id
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 NAP consistency, local schema, and map integration.
               </p>
-              {result.local_issues.length > 0 ? (
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Issues Found:</h4>
-                  <ul className="space-y-1">
-                    {result.local_issues.map((issue, index) => (
-                      <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
-                        • {issue}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <p className="text-green-600 text-sm">No local SEO issues found! 🎉</p>
-              )}
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900 dark:text-white">Sample Issues:</h4>
+                <ul className="space-y-1">
+                  {result.local_issues.map((issue, index) => (
+                    <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+                      • {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -243,20 +201,16 @@ export default async function AuditReportPage({ params }: { params: Promise<{ id
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Core Web Vitals and page speed analysis.
               </p>
-              {result.performance_issues.length > 0 ? (
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Issues Found:</h4>
-                  <ul className="space-y-1">
-                    {result.performance_issues.map((issue, index) => (
-                      <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
-                        • {issue}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <p className="text-green-600 text-sm">No performance issues found! 🎉</p>
-              )}
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900 dark:text-white">Sample Issues:</h4>
+                <ul className="space-y-1">
+                  {result.performance_issues.map((issue, index) => (
+                    <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+                      • {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -274,20 +228,16 @@ export default async function AuditReportPage({ params }: { params: Promise<{ id
               <p className="text-gray-600 dark:text-gray-300 mb-4">
                 Word count, heading structure, and image optimization.
               </p>
-              {result.content_issues.length > 0 ? (
-                <div className="space-y-2">
-                  <h4 className="font-medium text-gray-900 dark:text-white">Issues Found:</h4>
-                  <ul className="space-y-1">
-                    {result.content_issues.map((issue, index) => (
-                      <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
-                        • {issue}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <p className="text-green-600 text-sm">No content issues found! 🎉</p>
-              )}
+              <div className="space-y-2">
+                <h4 className="font-medium text-gray-900 dark:text-white">Sample Issues:</h4>
+                <ul className="space-y-1">
+                  {result.content_issues.map((issue, index) => (
+                    <li key={index} className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+                      • {issue}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
