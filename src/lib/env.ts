@@ -12,7 +12,7 @@ const envSchema = z.object({
 
   PAGESPEED_API_KEY: z.string().min(1).optional(),
 
-  NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_APP_URL: z.string().url().default("https://local-seo-audit-tool-navy.vercel.app"),
 });
 
 export type AppEnv = z.infer<typeof envSchema>;
