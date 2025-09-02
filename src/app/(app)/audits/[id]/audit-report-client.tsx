@@ -47,6 +47,7 @@ export default function AuditReportClient({
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isReauditing, setIsReauditing] = useState(false);
 
   const handleShare = async () => {
     setIsSharing(true);
@@ -80,6 +81,35 @@ export default function AuditReportClient({
         toast.error('Failed to copy link');
       }
     }
+  };
+
+  const handleReaudit = async () => {
+    setIsReauditing(true);
+    try {
+      const response = await fetch(`/api/audits/${audit.id}/reaudit`, {
+        method: 'POST',
+      });
+      
+      if (response.ok) {
+        toast.success('Re-audit started! Refreshing page...');
+        // Refresh the page to show new results
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        toast.error(`Re-audit failed: ${errorData.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      toast.error('Error starting re-audit');
+    } finally {
+      setIsReauditing(false);
+    }
+  };
+
+  const handleDownloadPDF = () => {
+    // Open PDF in new tab
+    window.open(`/api/audits/${audit.id}/pdf`, '_blank');
   };
 
   // If no results in DB, use fallback data
@@ -165,13 +195,13 @@ export default function AuditReportClient({
             </Button>
           </div>
         )}
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant="outline" className="flex items-center gap-2" onClick={handleDownloadPDF}>
           <Download className="h-4 w-4" />
           Download PDF
         </Button>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button variant="outline" className="flex items-center gap-2" onClick={handleReaudit} disabled={isReauditing}>
           <RefreshCw className="h-4 w-4" />
-          Re-audit
+          {isReauditing ? 'Re-auditing...' : 'Re-audit'}
         </Button>
       </div>
 
