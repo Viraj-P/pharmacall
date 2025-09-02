@@ -21,23 +21,38 @@ let cachedEnv: AppEnv | null = null;
 
 export function getEnv(): AppEnv {
   if (cachedEnv) return cachedEnv;
+  
+  // Log environment variables for debugging (remove in production)
+  console.log('Environment check:', {
+    hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+    hasSupabaseKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    hasResendKey: !!process.env.RESEND_API_KEY,
+    hasPagespeedKey: !!process.env.PAGESPEED_API_KEY,
+    appUrl: process.env.NEXT_PUBLIC_APP_URL,
+  });
+
   const parsed = envSchema.safeParse({
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
-
     RESEND_API_KEY: process.env.RESEND_API_KEY,
-
     NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-
     PAGESPEED_API_KEY: process.env.PAGESPEED_API_KEY,
-
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   });
 
   if (!parsed.success) {
-    console.warn("Using default environment values for development:", parsed.error.issues);
+    console.error("Environment validation failed:", parsed.error.issues);
+    
+    // Check if we're in production and have critical missing variables
+    if (process.env.NODE_ENV === 'production') {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        console.error("CRITICAL: Missing Supabase environment variables in production!");
+      }
+    }
+    
     // For development/build, use defaults
     cachedEnv = envSchema.parse({});
     return cachedEnv;

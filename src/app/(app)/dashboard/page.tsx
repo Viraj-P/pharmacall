@@ -67,8 +67,13 @@ export default async function DashboardPage() {
         <div className="mx-auto max-w-6xl px-6 py-4">
           <nav className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
-              <Globe className="h-6 w-6 text-blue-600" />
-              <span className="text-xl font-semibold">Local SEO Audit</span>
+              <div className="relative">
+                <Globe className="h-6 w-6 text-blue-600" />
+                <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-600 rounded-full"></div>
+              </div>
+              <span className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                LocalIQ
+              </span>
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/" className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
@@ -87,7 +92,7 @@ export default async function DashboardPage() {
 
       <div className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">LocalIQ Dashboard</h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2">
             Track your website SEO audits and performance over time.
           </p>
