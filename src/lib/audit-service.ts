@@ -32,11 +32,41 @@ export interface WebsiteData {
 export class AuditService {
   private static async fetchWebsite(url: string): Promise<string> {
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return await response.text();
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0; +https://github.com/Viraj-P/local-seo-audit-tool)',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'Accept-Encoding': 'gzip, deflate',
+          'Connection': 'keep-alive',
+        },
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      const html = await response.text();
+      if (!html || html.length < 100) {
+        throw new Error('Website returned insufficient content');
+      }
+      
+      return html;
     } catch (error) {
-      throw new Error(`Failed to fetch website: ${error}`);
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          throw new Error('Request timed out after 30 seconds');
+        }
+        throw new Error(`Failed to fetch website: ${error.message}`);
+      }
+      throw new Error('Failed to fetch website: Unknown error');
     }
   }
 
@@ -108,7 +138,12 @@ export class AuditService {
     
     // Check robots.txt
     try {
-      const robotsResponse = await fetch(`${baseUrl}/robots.txt`);
+      const robotsResponse = await fetch(`${baseUrl}/robots.txt`, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0)',
+        },
+      });
       results.hasRobotsTxt = robotsResponse.ok;
     } catch {
       results.hasRobotsTxt = false;
@@ -116,7 +151,12 @@ export class AuditService {
     
     // Check sitemap
     try {
-      const sitemapResponse = await fetch(`${baseUrl}/sitemap.xml`);
+      const sitemapResponse = await fetch(`${baseUrl}/sitemap.xml`, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0)',
+        },
+      });
       results.hasSitemap = sitemapResponse.ok;
     } catch {
       results.hasSitemap = false;
@@ -127,7 +167,12 @@ export class AuditService {
     
     // Check favicon
     try {
-      const faviconResponse = await fetch(`${baseUrl}/favicon.ico`);
+      const faviconResponse = await fetch(`${baseUrl}/favicon.ico`, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0)',
+        },
+      });
       results.hasFavicon = faviconResponse.ok;
     } catch {
       results.hasFavicon = false;
@@ -135,7 +180,12 @@ export class AuditService {
     
     // Check mobile viewport
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+        },
+      });
       const html = await response.text();
       results.mobileViewport = html.includes('viewport') && html.includes('width=device-width');
     } catch {
@@ -287,9 +337,14 @@ export class AuditService {
 
   public static async performAudit(url: string, cityRegion?: string): Promise<AuditResult> {
     try {
+      console.log(`Starting audit for: ${url}`);
+      
       // Fetch and parse website
       const html = await this.fetchWebsite(url);
+      console.log(`Successfully fetched website, HTML length: ${html.length}`);
+      
       const websiteData = this.parseHtml(html);
+      console.log(`Parsed HTML - Title: "${websiteData.title}", Word count: ${websiteData.wordCount}`);
       
       // Check technical basics
       const technicalBasics = await this.checkTechnicalBasics(url);
@@ -307,6 +362,8 @@ export class AuditService {
         (seo.score + technical.score + local.score + content.score + performance.score) / 5
       );
       
+      console.log(`Audit completed successfully - Overall score: ${overallScore}`);
+      
       return {
         seo_score: seo.score,
         technical_score: technical.score,
@@ -322,6 +379,7 @@ export class AuditService {
         raw_data: fullData,
       };
     } catch (error) {
+      console.error(`Audit failed for ${url}:`, error);
       throw new Error(`Audit failed: ${error}`);
     }
   }

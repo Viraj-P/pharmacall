@@ -102,6 +102,9 @@ export default function NewAuditPage() {
                   required
                   className="mt-1"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Make sure the website is publicly accessible and not behind a login
+                </p>
               </div>
 
               <div>

@@ -7,7 +7,7 @@ const CreateAuditSchema = z.object({
   business_name: z.string().min(1),
   website_url: z.string().url(),
   city_region: z.string().optional(),
-  google_business_profile_url: z.string().url().optional(),
+  google_business_profile_url: z.string().url().optional().or(z.literal('')),
   email: z.string().email(),
 });
 
