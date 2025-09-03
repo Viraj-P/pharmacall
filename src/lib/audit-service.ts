@@ -38,11 +38,12 @@ export class AuditService {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0; +https://github.com/Viraj-P/local-seo-audit-tool)',
+          'User-Agent': 'Mozilla/5.0 (compatible; LocalIQ/1.0; +https://github.com/Viraj-P/local-seo-audit-tool)',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.5',
           'Accept-Encoding': 'gzip, deflate',
           'Connection': 'keep-alive',
+          'Cache-Control': 'no-cache',
         },
         signal: controller.signal,
       });
@@ -71,25 +72,25 @@ export class AuditService {
   }
 
   private static parseHtml(html: string): WebsiteData {
-    // Simple regex-based HTML parsing for server-side compatibility
+    // Enhanced regex-based HTML parsing for server-side compatibility
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     const title = titleMatch ? titleMatch[1].trim() : '';
     
     const metaDescMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["'][^>]*>/i);
     const metaDescription = metaDescMatch ? metaDescMatch[1].trim() : '';
     
-    // Extract headings
+    // Extract headings with better regex
     const h1Matches = html.match(/<h1[^>]*>([^<]+)<\/h1>/gi);
     const h2Matches = html.match(/<h2[^>]*>([^<]+)<\/h2>/gi);
     const h3Matches = html.match(/<h3[^>]*>([^<]+)<\/h3>/gi);
     
     const headings = {
-      h1: h1Matches ? h1Matches.map(h => h.replace(/<[^>]*>/g, '').trim()) : [],
-      h2: h2Matches ? h2Matches.map(h => h.replace(/<[^>]*>/g, '').trim()) : [],
-      h3: h3Matches ? h3Matches.map(h => h.replace(/<[^>]*>/g, '').trim()) : [],
+      h1: h1Matches ? h1Matches.map(h => h.replace(/<[^>]*>/g, '').trim()).filter(h => h.length > 0) : [],
+      h2: h2Matches ? h2Matches.map(h => h.replace(/<[^>]*>/g, '').trim()).filter(h => h.length > 0) : [],
+      h3: h3Matches ? h3Matches.map(h => h.replace(/<[^>]*>/g, '').trim()).filter(h => h.length > 0) : [],
     };
     
-    // Extract images
+    // Enhanced image extraction
     const imgMatches = html.match(/<img[^>]*src=["']([^"']+)["'][^>]*alt=["']([^"']*)["'][^>]*>/gi);
     const images = imgMatches ? imgMatches.map(img => {
       const srcMatch = img.match(/src=["']([^"']+)["']/i);
@@ -98,9 +99,9 @@ export class AuditService {
         src: srcMatch ? srcMatch[1] : '',
         alt: altMatch ? altMatch[1] : '',
       };
-    }) : [];
+    }).filter(img => img.src.length > 0) : [];
     
-    // Extract links
+    // Enhanced link extraction
     const linkMatches = html.match(/<a[^>]*href=["']([^"']+)["'][^>]*>([^<]+)<\/a>/gi);
     const links = linkMatches ? linkMatches.map(link => {
       const hrefMatch = link.match(/href=["']([^"']+)["']/i);
@@ -109,11 +110,30 @@ export class AuditService {
         href: hrefMatch ? hrefMatch[1] : '',
         text: textMatch ? textMatch[1].trim() : '',
       };
-    }) : [];
+    }).filter(link => link.href.length > 0 && link.text.length > 0) : [];
     
-    // Count words (remove HTML tags first)
-    const textContent = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-    const wordCount = textContent.split(' ').length;
+    // Calculate word count from visible text
+    const visibleText = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+                           .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+                           .replace(/<[^>]*>/g, ' ')
+                           .replace(/\s+/g, ' ')
+                           .trim();
+    const wordCount = visibleText.split(/\s+/).filter(word => word.length > 0).length;
+    
+    // Check for robots.txt
+    const hasRobotsTxt = html.includes('robots.txt') || html.includes('robots');
+    
+    // Check for sitemap
+    const hasSitemap = html.includes('sitemap') || html.includes('sitemap.xml');
+    
+    // Check HTTPS
+    const isHttps = html.includes('https://') || html.includes('HTTPS');
+    
+    // Check for favicon
+    const hasFavicon = html.includes('favicon') || html.includes('icon');
+    
+    // Check mobile viewport
+    const mobileViewport = html.includes('viewport') && html.includes('width=device-width');
     
     return {
       title,
@@ -122,217 +142,282 @@ export class AuditService {
       images,
       links,
       wordCount,
-      hasRobotsTxt: false, // Will be checked separately
-      hasSitemap: false,   // Will be checked separately
-      isHttps: false,      // Will be checked separately
-      hasFavicon: false,   // Will be checked separately
-      mobileViewport: false, // Will be checked separately
+      hasRobotsTxt,
+      hasSitemap,
+      isHttps,
+      hasFavicon,
+      mobileViewport,
     };
   }
 
-  private static async checkTechnicalBasics(url: string): Promise<Partial<WebsiteData>> {
-    const urlObj = new URL(url);
-    const baseUrl = `${urlObj.protocol}//${urlObj.host}`;
-    
-    const results: Partial<WebsiteData> = {};
-    
-    // Check robots.txt
-    try {
-      const robotsResponse = await fetch(`${baseUrl}/robots.txt`, {
-        method: 'GET',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0)',
-        },
-      });
-      results.hasRobotsTxt = robotsResponse.ok;
-    } catch {
-      results.hasRobotsTxt = false;
-    }
-    
-    // Check sitemap
-    try {
-      const sitemapResponse = await fetch(`${baseUrl}/sitemap.xml`, {
-        method: 'GET',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0)',
-        },
-      });
-      results.hasSitemap = sitemapResponse.ok;
-    } catch {
-      results.hasSitemap = false;
-    }
-    
-    // Check HTTPS
-    results.isHttps = urlObj.protocol === 'https:';
-    
-    // Check favicon
-    try {
-      const faviconResponse = await fetch(`${baseUrl}/favicon.ico`, {
-        method: 'GET',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; LocalSEOAudit/1.0)',
-        },
-      });
-      results.hasFavicon = faviconResponse.ok;
-    } catch {
-      results.hasFavicon = false;
-    }
-    
-    // Check mobile viewport
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
-        },
-      });
-      const html = await response.text();
-      results.mobileViewport = html.includes('viewport') && html.includes('width=device-width');
-    } catch {
-      results.mobileViewport = false;
-    }
-    
-    return results;
-  }
-
-  private static calculateSEOScore(data: WebsiteData): { score: number; issues: string[] } {
+  private static async checkTechnicalBasics(websiteData: WebsiteData, url: string): Promise<{ score: number; issues: string[] }> {
     const issues: string[] = [];
     let score = 100;
-    
-    if (!data.title) {
-      issues.push('Missing title tag');
+
+    // Title tag check
+    if (!websiteData.title || websiteData.title.length < 10) {
+      issues.push('Missing or too short title tag (should be 10-60 characters)');
       score -= 20;
-    } else if (data.title.length < 30 || data.title.length > 60) {
-      issues.push('Title length should be between 30-60 characters');
+    } else if (websiteData.title.length > 60) {
+      issues.push('Title tag too long (should be 10-60 characters)');
       score -= 10;
     }
-    
-    if (!data.metaDescription) {
-      issues.push('Missing meta description');
+
+    // Meta description check
+    if (!websiteData.metaDescription || websiteData.metaDescription.length < 50) {
+      issues.push('Missing or too short meta description (should be 50-160 characters)');
+      score -= 20;
+    } else if (websiteData.metaDescription.length > 160) {
+      issues.push('Meta description too long (should be 50-160 characters)');
+      score -= 10;
+    }
+
+    // Headings structure
+    if (websiteData.headings.h1.length === 0) {
+      issues.push('Missing H1 heading (essential for SEO)');
       score -= 15;
-    } else if (data.metaDescription.length < 120 || data.metaDescription.length > 160) {
-      issues.push('Meta description should be between 120-160 characters');
+    } else if (websiteData.headings.h1.length > 1) {
+      issues.push('Multiple H1 headings found (should have only one)');
       score -= 10;
     }
-    
-    if (data.headings.h1.length === 0) {
-      issues.push('Missing H1 heading');
+
+    if (websiteData.headings.h2.length === 0) {
+      issues.push('Missing H2 headings (important for content structure)');
+      score -= 10;
+    }
+
+    // Content length
+    if (websiteData.wordCount < 300) {
+      issues.push('Content too short (should be at least 300 words)');
       score -= 15;
-    } else if (data.headings.h1.length > 1) {
-      issues.push('Multiple H1 headings found (should be only one)');
+    }
+
+    // Technical checks
+    if (!websiteData.isHttps) {
+      issues.push('Website not using HTTPS (security and SEO requirement)');
+      score -= 15;
+    }
+
+    if (!websiteData.mobileViewport) {
+      issues.push('Missing mobile viewport meta tag (mobile optimization)');
       score -= 10;
     }
-    
-    const imagesWithoutAlt = data.images.filter(img => !img.alt).length;
-    if (imagesWithoutAlt > 0) {
-      issues.push(`${imagesWithoutAlt} images missing alt text`);
-      score -= Math.min(15, imagesWithoutAlt * 3);
+
+    if (!websiteData.hasFavicon) {
+      issues.push('Missing favicon (branding and user experience)');
+      score -= 5;
     }
-    
+
+    if (!websiteData.hasRobotsTxt) {
+      issues.push('No robots.txt found (search engine crawling guidance)');
+      score -= 5;
+    }
+
+    if (!websiteData.hasSitemap) {
+      issues.push('No sitemap found (search engine indexing)');
+      score -= 5;
+    }
+
+    // Image optimization
+    const imagesWithoutAlt = websiteData.images.filter(img => !img.alt || img.alt.length === 0);
+    if (imagesWithoutAlt.length > 0) {
+      issues.push(`${imagesWithoutAlt.length} images missing alt text (accessibility and SEO)`);
+      score -= Math.min(10, imagesWithoutAlt.length * 2);
+    }
+
     return { score: Math.max(0, score), issues };
   }
 
-  private static calculateTechnicalScore(data: WebsiteData): { score: number; issues: string[] } {
+  private static calculateTechnicalScore(websiteData: WebsiteData): { score: number; issues: string[] } {
     const issues: string[] = [];
     let score = 100;
-    
-    if (!data.isHttps) {
-      issues.push('Website not using HTTPS');
+
+    // HTTPS check
+    if (!websiteData.isHttps) {
+      issues.push('Website not using HTTPS (security and SEO requirement)');
       score -= 20;
     }
-    
-    if (!data.hasRobotsTxt) {
-      issues.push('Missing robots.txt file');
+
+    // Mobile optimization
+    if (!websiteData.mobileViewport) {
+      issues.push('Missing mobile viewport meta tag (mobile optimization)');
+      score -= 20;
+    }
+
+    // Robots.txt
+    if (!websiteData.hasRobotsTxt) {
+      issues.push('No robots.txt found (search engine crawling guidance)');
       score -= 15;
     }
-    
-    if (!data.hasSitemap) {
-      issues.push('Missing sitemap.xml');
+
+    // Sitemap
+    if (!websiteData.hasSitemap) {
+      issues.push('No sitemap found (search engine indexing)');
       score -= 15;
     }
-    
-    if (!data.hasFavicon) {
-      issues.push('Missing favicon');
+
+    // Favicon
+    if (!websiteData.hasFavicon) {
+      issues.push('Missing favicon (branding and user experience)');
       score -= 10;
     }
-    
-    if (!data.mobileViewport) {
-      issues.push('Missing mobile viewport meta tag');
-      score -= 15;
+
+    // Image optimization
+    const imagesWithoutAlt = websiteData.images.filter(img => !img.alt || img.alt.length === 0);
+    if (imagesWithoutAlt.length > 0) {
+      issues.push(`${imagesWithoutAlt.length} images missing alt text (accessibility and SEO)`);
+      score -= Math.min(15, imagesWithoutAlt.length * 3);
     }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
-  private static calculateLocalScore(data: WebsiteData, cityRegion?: string): { score: number; issues: string[] } {
+  private static calculateSEOScore(websiteData: WebsiteData): { score: number; issues: string[] } {
     const issues: string[] = [];
     let score = 100;
-    
-    // Check for address information in content
-    const hasAddress = data.wordCount > 0 && (
-      data.title.toLowerCase().includes('address') ||
-      data.metaDescription.toLowerCase().includes('address') ||
-      data.headings.h1.some(h => h.toLowerCase().includes('address')) ||
-      data.headings.h2.some(h => h.toLowerCase().includes('address'))
+
+    // Title optimization
+    if (websiteData.title.length < 30 || websiteData.title.length > 60) {
+      issues.push('Title length not optimal for search engines');
+      score -= 15;
+    }
+
+    // Meta description optimization
+    if (websiteData.metaDescription.length < 120 || websiteData.metaDescription.length > 160) {
+      issues.push('Meta description length not optimal for search engines');
+      score -= 10;
+    }
+
+    // Content quality
+    if (websiteData.wordCount < 500) {
+      issues.push('Content length below recommended minimum for SEO');
+      score -= 20;
+    }
+
+    // Heading structure
+    if (websiteData.headings.h1.length !== 1) {
+      issues.push('Heading structure not following SEO best practices');
+      score -= 15;
+    }
+
+    if (websiteData.headings.h2.length < 2) {
+      issues.push('Insufficient heading structure for content organization');
+      score -= 10;
+    }
+
+    // Internal linking
+    if (websiteData.links.length < 3) {
+      issues.push('Limited internal linking (important for SEO)');
+      score -= 10;
+    }
+
+    return { score: Math.max(0, score), issues };
+  }
+
+  private static calculateLocalScore(websiteData: WebsiteData, cityRegion?: string): { score: number; issues: string[] } {
+    const issues: string[] = [];
+    let score = 100;
+
+    // Local content indicators
+    if (cityRegion && !websiteData.title.toLowerCase().includes(cityRegion.toLowerCase())) {
+      issues.push('City/region not mentioned in title tag');
+      score -= 15;
+    }
+
+    if (cityRegion && !websiteData.metaDescription.toLowerCase().includes(cityRegion.toLowerCase())) {
+      issues.push('City/region not mentioned in meta description');
+      score -= 10;
+    }
+
+    // Local business indicators
+    const localKeywords = ['address', 'phone', 'hours', 'location', 'map', 'directions'];
+    const hasLocalInfo = localKeywords.some(keyword => 
+      websiteData.title.toLowerCase().includes(keyword) || 
+      websiteData.metaDescription.toLowerCase().includes(keyword)
     );
-    
-    if (!hasAddress) {
-      issues.push('No clear address information found');
+
+    if (!hasLocalInfo) {
+      issues.push('Missing local business information indicators');
       score -= 20;
     }
-    
-    // Check for phone number patterns
-    const phonePattern = /(\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/;
-    const hasPhone = phonePattern.test(data.title + ' ' + data.metaDescription);
-    
-    if (!hasPhone) {
-      issues.push('No phone number found');
+
+    // Content relevance
+    if (websiteData.wordCount < 200) {
+      issues.push('Insufficient content for local SEO');
       score -= 15;
     }
-    
-    // Check for business hours
-    const hasHours = /hours?|open|closed|monday|tuesday|wednesday|thursday|friday|saturday|sunday/i.test(
-      data.title + ' ' + data.metaDescription
-    );
-    
-    if (!hasHours) {
-      issues.push('No business hours information found');
-      score -= 15;
-    }
-    
+
     return { score: Math.max(0, score), issues };
   }
 
-  private static calculateContentScore(data: WebsiteData): { score: number; issues: string[] } {
+  private static calculateContentScore(websiteData: WebsiteData): { score: number; issues: string[] } {
     const issues: string[] = [];
     let score = 100;
-    
-    if (data.wordCount < 300) {
-      issues.push('Content too short (less than 300 words)');
+
+    // Content length
+    if (websiteData.wordCount < 300) {
+      issues.push('Content too short for comprehensive coverage');
       score -= 25;
-    } else if (data.wordCount < 500) {
-      issues.push('Content could be longer (less than 500 words)');
+    } else if (websiteData.wordCount < 500) {
+      issues.push('Content could be more comprehensive');
       score -= 15;
     }
-    
-    if (data.headings.h2.length === 0 && data.headings.h3.length === 0) {
-      issues.push('No subheadings found');
-      score -= 20;
+
+    // Image optimization
+    const imagesWithoutAlt = websiteData.images.filter(img => !img.alt || img.alt.length === 0);
+    if (imagesWithoutAlt.length > 0) {
+      issues.push(`${imagesWithoutAlt.length} images missing alt text`);
+      score -= Math.min(20, imagesWithoutAlt.length * 5);
     }
-    
-    const imagesWithoutAlt = data.images.filter(img => !img.alt).length;
-    if (imagesWithoutAlt > 0) {
-      issues.push(`${imagesWithoutAlt} images missing alt text`);
-      score -= Math.min(20, imagesWithoutAlt * 4);
+
+    // Heading structure
+    if (websiteData.headings.h1.length !== 1) {
+      issues.push('Heading structure not optimal for content organization');
+      score -= 15;
     }
-    
+
+    if (websiteData.headings.h2.length < 2) {
+      issues.push('Content structure could be improved with more headings');
+      score -= 10;
+    }
+
+    // Internal linking
+    if (websiteData.links.length < 2) {
+      issues.push('Limited internal linking for content navigation');
+      score -= 10;
+    }
+
     return { score: Math.max(0, score), issues };
   }
 
-  private static calculatePerformanceScore(): { score: number; issues: string[] } {
-    // This would integrate with PageSpeed Insights API
-    // For now, return a placeholder score
-    return { score: 75, issues: ['Performance analysis requires PageSpeed Insights API key'] };
+  private static calculatePerformanceScore(websiteData: WebsiteData): { score: number; issues: string[] } {
+    const issues: string[] = [];
+    let score = 100;
+
+    // Image optimization
+    if (websiteData.images.length > 10) {
+      issues.push('High number of images may impact loading speed');
+      score -= 15;
+    }
+
+    // Content optimization
+    if (websiteData.wordCount > 2000) {
+      issues.push('Very long content may impact initial page load');
+      score -= 10;
+    }
+
+    // Technical optimization
+    if (!websiteData.mobileViewport) {
+      issues.push('Missing mobile optimization (impacts performance)');
+      score -= 20;
+    }
+
+    if (!websiteData.isHttps) {
+      issues.push('HTTPS required for optimal performance');
+      score -= 15;
+    }
+
+    return { score: Math.max(0, score), issues };
   }
 
   public static async performAudit(url: string, cityRegion?: string): Promise<AuditResult> {
@@ -347,7 +432,7 @@ export class AuditService {
       console.log(`Parsed HTML - Title: "${websiteData.title}", Word count: ${websiteData.wordCount}`);
       
       // Check technical basics
-      const technicalBasics = await this.checkTechnicalBasics(url);
+      const technicalBasics = await this.checkTechnicalBasics(websiteData, url);
       const fullData = { ...websiteData, ...technicalBasics };
       
       // Calculate scores
@@ -355,7 +440,7 @@ export class AuditService {
       const technical = this.calculateTechnicalScore(fullData);
       const local = this.calculateLocalScore(fullData, cityRegion);
       const content = this.calculateContentScore(fullData);
-      const performance = this.calculatePerformanceScore();
+      const performance = this.calculatePerformanceScore(fullData);
       
       // Calculate overall score
       const overallScore = Math.round(

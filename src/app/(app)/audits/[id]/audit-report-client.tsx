@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Share2, Download, RefreshCw, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { PDFService, PDFAuditData } from "@/lib/pdf-service";
 
 interface AuditResult {
   id: string;
@@ -107,9 +108,51 @@ export default function AuditReportClient({
     }
   };
 
-  const handleDownloadPDF = () => {
-    // Open PDF in new tab
-    window.open(`/api/audits/${audit.id}/pdf`, '_blank');
+  const handleDownloadPDF = async () => {
+    try {
+      // Prepare data for PDF generation
+      const pdfData: PDFAuditData = {
+        business_name: audit.business_name,
+        website_url: audit.website_url,
+        created_at: audit.created_at,
+        overall_score: result.overall_score,
+        seo_score: result.seo_score,
+        technical_score: result.technical_score,
+        local_score: result.local_score,
+        performance_score: result.performance_score,
+        content_score: result.content_score,
+        seo_issues: result.seo_issues,
+        technical_issues: result.technical_issues,
+        local_issues: result.local_issues,
+        performance_issues: result.performance_issues,
+        content_issues: result.content_issues,
+      };
+
+      // Show loading state
+      toast.loading('Generating PDF report...');
+
+      // Generate PDF
+      const pdfBlob = await PDFService.generateAuditReport(pdfData);
+      
+      // Create download link
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `localiq-audit-${audit.business_name.replace(/\s+/g, '-').toLowerCase()}.pdf`;
+      
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Cleanup
+      URL.revokeObjectURL(url);
+      
+      toast.success('PDF downloaded successfully!');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error('Failed to generate PDF. Please try again.');
+    }
   };
 
   // If no results in DB, use fallback data
