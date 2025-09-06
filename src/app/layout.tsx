@@ -1,26 +1,27 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "sonner";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { Providers } from '@/components/providers'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "LocalIQ - Automated Local SEO Reports in Minutes",
-  description: "Get actionable insights to improve rankings, attract more local customers, and close more clients — no SEO expertise required.",
-};
+  title: 'Pharmacy Voice Automation',
+  description: 'AI-powered voice call automation for specialty pharmacies',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        <Toaster position="top-right" />
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
-  );
+  )
 }

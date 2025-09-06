@@ -1,176 +1,185 @@
-# Local SEO Audit Tool 🚀
+# Pharmacy Voice Automation
 
-A comprehensive local SEO analysis tool built with Next.js, Supabase, and Tailwind CSS. Analyze your business website's SEO performance, technical setup, local signals, and content quality.
+AI-powered voice call automation tool for specialty pharmacies. This application enables pharmacists to trigger automated voice calls for delivery scheduling, medication changes, and shipment feedback while maintaining PHI compliance.
 
-## ✨ Features
+## Features
 
-- **🔍 Real-time SEO Analysis** - Crawl and analyze websites instantly
-- **📊 Comprehensive Scoring** - 5-category scoring system (SEO, Technical, Local, Performance, Content)
-- **🎯 Local SEO Focus** - Specialized analysis for local business optimization
-- **📱 Responsive Dashboard** - Beautiful, mobile-friendly interface
-- **⚡ Fast Performance** - Built with Next.js 15 and Turbopack
-- **🗄️ Data Persistence** - Store and track audit results over time
+- **Multi-tenant Architecture**: Secure organization-based data isolation
+- **Voice Agent Integration**: Support for Retell, Vapi, and Twilio
+- **PHI Compliance**: Encrypted data storage and HIPAA-compliant logging
+- **Real-time Dashboard**: Call monitoring and patient management
+- **Email Notifications**: Automated follow-ups and summaries
+- **Audit Trail**: Comprehensive logging for compliance
 
-## 🚀 Quick Start
+## Tech Stack
 
-### 1. Install Dependencies
+- **Frontend**: Next.js 14 with TypeScript and App Router
+- **Backend**: Supabase (PostgreSQL, Auth, RLS)
+- **Voice**: Retell AI, Vapi, or Twilio
+- **Email**: Resend
+- **Monitoring**: Sentry
+- **Styling**: Tailwind CSS with Radix UI components
+
+## Quick Start
+
+### 1. Environment Setup
+
+Copy the environment template and configure your services:
+
+```bash
+cp env.example .env.local
+```
+
+Fill in your service credentials in `.env.local`.
+
+### 2. Database Setup
+
+Run the Supabase migrations:
+
+```bash
+npm run db:push
+```
+
+### 3. Install Dependencies
+
 ```bash
 npm install
 ```
 
-### 2. Set Up Environment Variables
-Create a `.env.local` file:
-```env
-# Required: Supabase Database
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+### 4. Development
 
-# Optional: PageSpeed Insights API
-PAGESPEED_API_KEY=your_pagespeed_api_key
-
-# Optional: Email Service
-RESEND_API_KEY=your_resend_api_key
-
-# App Configuration
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
-
-### 3. Set Up Database
-- Create a [Supabase](https://supabase.com) project
-- Run the SQL commands from `database.sql` in your Supabase SQL editor
-- Copy your project credentials to `.env.local`
-
-### 4. Launch Development Server
 ```bash
 npm run dev
 ```
 
-### 5. Open Your Browser
-Navigate to `http://localhost:3000`
+Visit `http://localhost:3000` to see the application.
 
-## 🧪 How to Use
+## Configuration
 
-1. **Start an Audit**
-   - Go to `/new` page
-   - Enter business name and website URL
-   - Submit to begin analysis
+### Voice Providers
 
-2. **View Results**
-   - Real-time scoring across 5 categories
-   - Detailed issue identification
-   - Actionable improvement recommendations
+The application supports three voice providers:
 
-3. **Track Progress**
-   - Dashboard shows all audits
-   - Historical performance tracking
-   - Score comparisons over time
+#### Retell AI
+```env
+VOICE_PROVIDER=retell
+RETELL_API_KEY=your_api_key
+RETELL_AGENT_ID=your_agent_id
+```
 
-## 🏗️ Architecture
+#### Vapi
+```env
+VOICE_PROVIDER=vapi
+VAPI_API_KEY=your_api_key
+VAPI_ASSISTANT_ID=your_assistant_id
+VAPI_PHONE_NUMBER_ID=your_phone_number_id
+```
 
-- **Frontend**: Next.js 15 + React 19 + Tailwind CSS
-- **Backend**: Next.js API Routes + Supabase
-- **Database**: PostgreSQL with Row Level Security
-- **Analysis**: Custom SEO algorithms + PageSpeed Insights integration
-- **Deployment**: Vercel/Netlify ready
+#### Twilio
+```env
+VOICE_PROVIDER=twilio
+TWILIO_ACCOUNT_SID=your_account_sid
+TWILIO_AUTH_TOKEN=your_auth_token
+TWILIO_PHONE_NUMBER=your_phone_number
+```
 
-## 📊 Analysis Categories
+### Email Configuration
 
-### SEO Score (On-page)
-- Title tag optimization
-- Meta description quality
-- Heading structure (H1, H2, H3)
-- Image alt text validation
+Configure Resend for email notifications:
 
-### Technical Score
-- HTTPS implementation
-- Robots.txt presence
-- Sitemap.xml availability
-- Mobile viewport configuration
-- Favicon setup
+```env
+RESEND_API_KEY=your_resend_api_key
+EMAIL_FROM=noreply@yourdomain.com
+```
 
-### Local Score
-- Address information detection
-- Phone number validation
-- Business hours identification
-- Local business signals
+### Monitoring
 
-### Content Score
-- Word count analysis
-- Heading structure quality
-- Image optimization
-- Content depth assessment
+Set up Sentry for error tracking:
 
-### Performance Score
-- Basic performance metrics
-- PageSpeed Insights integration (with API key)
-- Core Web Vitals analysis
+```env
+NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
+SENTRY_ORG=your_sentry_org
+SENTRY_PROJECT=your_sentry_project
+```
 
-## 🔑 API Keys Required
+## Architecture
 
-| Service | Purpose | Cost | Required |
-|---------|---------|------|----------|
-| **Supabase** | Database & Auth | Free tier | ✅ Yes |
-| **PageSpeed Insights** | Performance Analysis | Free (10k/day) | ❌ No |
-| **Resend** | Email Notifications | Free tier | ❌ No |
+### Database Schema
 
-## 🚀 Production Deployment
+The application uses a multi-tenant architecture with Row Level Security (RLS):
 
-1. **Build the app:**
-   ```bash
-   npm run build
-   ```
+- **Organizations**: Top-level tenant isolation
+- **Users**: Pharmacists with role-based access
+- **Patients**: PHI-compliant patient data with encryption
+- **Voice Calls**: Call records with transcripts and structured data
+- **Call Logs**: Audit trail for compliance
+- **Email Notifications**: Notification tracking
 
-2. **Deploy to Vercel:**
-   - Connect GitHub repository
-   - Add environment variables
-   - Deploy automatically
+### Security Features
 
-3. **Set production URLs:**
-   - Update `NEXT_PUBLIC_APP_URL` to your domain
-   - Ensure all API keys are configured
+- **PHI Encryption**: Patient data encrypted at rest
+- **RLS Policies**: Database-level access control
+- **Webhook Verification**: Secure voice provider integration
+- **Compliance Logging**: HIPAA-compliant audit trails
+- **Data Sanitization**: PHI filtering in error logs
 
-## 🐛 Troubleshooting
+### API Routes
 
-### Common Issues
-- **Database Connection**: Verify Supabase credentials
-- **Audit Failures**: Check website accessibility
-- **Missing Scores**: Ensure database tables exist
+- `/api/calls` - Call management
+- `/api/patients` - Patient management
+- `/api/voice/webhook` - Voice provider webhooks
+- `/api/voice/initiate` - Call initiation
+- `/api/email/process` - Email notification processing
+- `/api/dashboard/stats` - Dashboard statistics
 
-### Debug Steps
-1. Check browser console for errors
-2. Verify environment variables
-3. Test with simple websites first
-4. Check Supabase dashboard for table creation
+## Deployment
 
-## 📈 Roadmap
+### Vercel Deployment
 
-- [ ] PDF report generation
-- [ ] Email notifications
-- [ ] Competitor analysis
-- [ ] Schema.org validation
-- [ ] Historical trend analysis
-- [ ] API rate limiting
-- [ ] Bulk audit processing
+1. Connect your repository to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy
 
-## 🤝 Contributing
+### Environment Variables
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Ensure all required environment variables are set in your deployment environment.
 
-## 📄 License
+### Database
 
-MIT License - see LICENSE file for details
+Run migrations in your Supabase project:
 
-## 🆘 Support
+```bash
+npm run db:push
+```
 
-- Check the [SETUP.md](./SETUP.md) for detailed setup instructions
-- Review browser console for error messages
-- Test with simple websites first
-- Ensure all environment variables are set
+## Usage
 
----
+### For Pharmacists
 
-**Built with ❤️ using Next.js, Supabase, and Tailwind CSS**
+1. **Login**: Access the dashboard with your credentials
+2. **Initiate Calls**: Use the quick actions to start voice calls
+3. **Monitor Progress**: View real-time call status and transcripts
+4. **Review Results**: Access structured data and AI insights
+
+### For Administrators
+
+1. **User Management**: Manage pharmacist accounts and permissions
+2. **Organization Settings**: Configure voice providers and preferences
+3. **Compliance Monitoring**: Review audit logs and access patterns
+
+## Compliance
+
+This application is designed with healthcare compliance in mind:
+
+- **HIPAA Compliance**: PHI encryption and access controls
+- **Audit Trails**: Comprehensive logging of all actions
+- **Data Minimization**: Only necessary data is collected and stored
+- **Access Controls**: Role-based permissions and RLS policies
+
+## Support
+
+For technical support or questions about compliance, please contact your system administrator.
+
+## License
+
+This software is proprietary and confidential. Unauthorized distribution is prohibited.

@@ -1,44 +1,29 @@
-import { cookies } from "next/headers";
-import { createServerClient } from "@supabase/ssr";
-import { getEnv } from "@/lib/env";
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-export async function getSupabaseServerClient() {
-  const env = getEnv();
-  const cookieStore = await cookies();
+export async function createClient() {
+  const cookieStore = await cookies()
 
-  const supabase = createServerClient(
-    env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll()
         },
-        set(name: string, value: string, options: any) {
+        setAll(cookiesToSet) {
           try {
-            cookieStore.set({ name, value, ...options });
-          } catch {}
-        },
-        remove(name: string, options: any) {
-          try {
-            cookieStore.set({ name, value: "", ...options });
-          } catch {}
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
         },
       },
     }
-  );
-
-  return supabase;
-}
-
-export async function getSessionServer() {
-  const supabase = await getSupabaseServerClient();
-  const { data } = await supabase.auth.getSession();
-  return data.session ?? null;
-}
-
-export async function getUserServer() {
-  const supabase = await getSupabaseServerClient();
-  const { data } = await supabase.auth.getUser();
-  return data.user ?? null;
+  )
 }

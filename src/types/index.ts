@@ -1,103 +1,116 @@
+export type UserRole = 'pharmacist' | 'admin' | 'super_admin'
+export type CallStatus = 'scheduled' | 'in_progress' | 'completed' | 'failed' | 'cancelled'
+export type CallType = 'delivery_scheduling' | 'medication_change' | 'shipment_feedback' | 'general_inquiry'
+
+export interface Organization {
+  id: string
+  name: string
+  slug: string
+  settings: Record<string, any>
+  created_at: string
+  updated_at: string
+}
+
 export interface User {
-  id: string;
-  email: string;
-  created_at: string;
+  id: string
+  email: string
+  role: UserRole
+  organization_id: string
+  profile: Record<string, any>
+  last_login: string | null
+  created_at: string
+  updated_at: string
 }
 
-export interface Audit {
-  id: string;
-  user_id: string;
-  business_name: string;
-  website_url: string;
-  city_region?: string;
-  google_business_profile_url?: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  created_at: string;
-  updated_at: string;
-  completed_at?: string;
+export interface Patient {
+  id: string
+  organization_id: string
+  encrypted_phone: string
+  encrypted_name?: string
+  encrypted_dob?: string
+  patient_id_hash: string
+  medications: any[]
+  preferences: Record<string, any>
+  created_at: string
+  updated_at: string
 }
 
-export interface AuditResult {
-  id: string;
-  audit_id: string;
-  
-  // On-page SEO
-  seo_score: number;
-  seo_issues: SEOIssue[];
-  
-  // Technical basics
-  technical_score: number;
-  technical_issues: TechnicalIssue[];
-  
-  // Local signals
-  local_score: number;
-  local_issues: LocalIssue[];
-  
-  // Performance
-  performance_score: number;
-  performance_issues: PerformanceIssue[];
-  
-  // Content
-  content_score: number;
-  content_issues: ContentIssue[];
-  
-  overall_score: number;
-  created_at: string;
+export interface VoiceCall {
+  id: string
+  organization_id: string
+  patient_id: string
+  pharmacist_id: string | null
+  external_call_id?: string
+  call_type: CallType
+  status: CallStatus
+  scheduled_at?: string
+  started_at?: string
+  completed_at?: string
+  duration_seconds?: number
+  recording_url?: string
+  transcript?: string
+  structured_data: Record<string, any>
+  ai_insights: Record<string, any>
+  created_at: string
+  updated_at: string
 }
 
-export interface SEOIssue {
-  type: 'title' | 'meta_description' | 'h1' | 'canonical' | 'robots_meta';
-  severity: 'low' | 'medium' | 'high';
-  message: string;
-  suggestion: string;
+export interface CallLog {
+  id: string
+  call_id: string
+  organization_id: string
+  event_type: string
+  event_data: Record<string, any>
+  created_at: string
 }
 
-export interface TechnicalIssue {
-  type: 'robots_txt' | 'sitemap_xml' | 'https' | 'mobile_viewport' | 'broken_links' | 'favicons';
-  severity: 'low' | 'medium' | 'high';
-  message: string;
-  suggestion: string;
+export interface EmailNotification {
+  id: string
+  organization_id: string
+  user_id: string
+  call_id: string
+  email_type: string
+  status: string
+  sent_at?: string
+  error_message?: string
+  created_at: string
 }
 
-export interface LocalIssue {
-  type: 'nap' | 'schema_local_business' | 'map_embed';
-  severity: 'low' | 'medium' | 'high';
-  message: string;
-  suggestion: string;
+// Voice provider types
+export interface VoiceProviderConfig {
+  provider: 'retell' | 'vapi' | 'twilio'
+  api_key: string
+  webhook_url: string
+  settings: Record<string, any>
 }
 
-export interface PerformanceIssue {
-  type: 'core_web_vitals' | 'lighthouse_score';
-  severity: 'low' | 'medium' | 'high';
-  message: string;
-  suggestion: string;
-  metrics?: {
-    lcp?: number;
-    fid?: number;
-    cls?: number;
-    fcp?: number;
-    ttfb?: number;
-  };
+export interface CallInitiationRequest {
+  patient_id: string
+  call_type: CallType
+  scheduled_at?: string
+  custom_prompt?: string
 }
 
-export interface ContentIssue {
-  type: 'word_count' | 'headings_structure' | 'image_alts';
-  severity: 'low' | 'medium' | 'high';
-  message: string;
-  suggestion: string;
+export interface CallWebhookPayload {
+  call_id: string
+  status: CallStatus
+  transcript?: string
+  recording_url?: string
+  structured_data?: Record<string, any>
+  ai_insights?: Record<string, any>
+  duration_seconds?: number
 }
 
-export interface CreateAuditRequest {
-  business_name: string;
-  website_url: string;
-  city_region?: string;
-  google_business_profile_url?: string;
-  email: string;
+// UI Component types
+export interface DashboardStats {
+  total_calls: number
+  completed_calls: number
+  pending_calls: number
+  success_rate: number
+  avg_duration: number
 }
 
-export interface AuditStatus {
-  id: string;
-  status: Audit['status'];
-  progress?: number;
-  estimated_completion?: string;
+export interface PatientWithCalls extends Patient {
+  recent_calls: VoiceCall[]
+  call_count: number
 }
