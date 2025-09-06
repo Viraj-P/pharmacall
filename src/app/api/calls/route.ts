@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth'
-import { CallInitiationRequest } from '@/types'
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,30 +8,32 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient()
     
     const { searchParams } = new URL(request.url)
+    const limit = parseInt(searchParams.get('limit') || '10')
     const status = searchParams.get('status')
     const callType = searchParams.get('call_type')
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const offset = (page - 1) * limit
 
     let query = supabase
       .from('voice_calls')
       .select(`
-        *,
+        id,
+        call_type,
+        status,
+        duration_seconds,
+        created_at,
+        completed_at,
+        scheduled_at,
+        started_at,
+        transcript,
+        structured_data,
+        ai_insights,
         patients!inner(
           id,
           encrypted_phone,
-          encrypted_name,
           patient_id_hash
-        ),
-        users!voice_calls_pharmacist_id_fkey(
-          id,
-          email
         )
       `)
       .eq('organization_id', user.organization_id)
       .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
 
     if (status) {
       query = query.eq('status', status)
@@ -42,21 +43,17 @@ export async function GET(request: NextRequest) {
       query = query.eq('call_type', callType)
     }
 
-    const { data: calls, error, count } = await query
+    if (limit) {
+      query = query.limit(limit)
+    }
+
+    const { data: calls, error } = await query
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json({
-      calls,
-      pagination: {
-        page,
-        limit,
-        total: count,
-        totalPages: Math.ceil((count || 0) / limit)
-      }
-    })
+    return NextResponse.json({ calls: calls || [] })
   } catch (error) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
@@ -67,13 +64,21 @@ export async function POST(request: NextRequest) {
     const user = await requireAuth()
     const supabase = await createClient()
     
-    const body: CallInitiationRequest = await request.json()
+    const body = await request.json()
     const { patient_id, call_type, scheduled_at, custom_prompt } = body
 
-    // Verify patient belongs to user's organization
+    // Validate required fields
+    if (!patient_id || !call_type) {
+      return NextResponse.json(
+        { error: 'patient_id and call_type are required' },
+        { status: 400 }
+      )
+    }
+
+    // Verify patient belongs to organization
     const { data: patient, error: patientError } = await supabase
       .from('patients')
-      .select('id, organization_id')
+      .select('id')
       .eq('id', patient_id)
       .eq('organization_id', user.organization_id)
       .single()
@@ -103,13 +108,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: callError.message }, { status: 500 })
     }
 
-    // Log the call initiation
+    // Log the call creation
     await supabase
       .from('call_logs')
       .insert({
         call_id: call.id,
         organization_id: user.organization_id,
-        event_type: 'call_initiated',
+        event_type: 'call_created',
         event_data: {
           pharmacist_id: user.id,
           call_type,
@@ -117,10 +122,7 @@ export async function POST(request: NextRequest) {
         }
       })
 
-    // TODO: Trigger voice agent API call here
-    // This would integrate with Retell/Vapi/Twilio
-
-    return NextResponse.json({ call }, { status: 201 })
+    return NextResponse.json({ call })
   } catch (error) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }

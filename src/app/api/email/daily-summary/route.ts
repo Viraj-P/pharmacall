@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
         // Only send summary if there were calls
         if (totalCalls > 0) {
-          await emailService.sendDailySummary(user, {
+          await emailService.sendDailySummary(user as any, {
             totalCalls,
             completedCalls,
             pendingCalls,

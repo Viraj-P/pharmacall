@@ -1,185 +1,253 @@
-# Pharmacy Voice Automation
+# 🏥 Pharmacy Voice Automation
 
-AI-powered voice call automation tool for specialty pharmacies. This application enables pharmacists to trigger automated voice calls for delivery scheduling, medication changes, and shipment feedback while maintaining PHI compliance.
+AI-powered voice call automation platform for specialty pharmacies with HIPAA compliance and multi-tenant architecture.
 
-## Features
+## ✨ Features
 
-- **Multi-tenant Architecture**: Secure organization-based data isolation
-- **Voice Agent Integration**: Support for Retell, Vapi, and Twilio
-- **PHI Compliance**: Encrypted data storage and HIPAA-compliant logging
-- **Real-time Dashboard**: Call monitoring and patient management
-- **Email Notifications**: Automated follow-ups and summaries
-- **Audit Trail**: Comprehensive logging for compliance
+- **🤖 AI Voice Agents** - Integration with Retell, Vapi, and Twilio
+- **🔐 HIPAA Compliant** - End-to-end PHI encryption and audit trails
+- **🏢 Multi-tenant** - Secure organization isolation with RLS
+- **📊 Real-time Analytics** - Comprehensive dashboard and reporting
+- **📧 Email Automation** - Resend integration for follow-ups
+- **🔍 Monitoring** - Sentry error tracking and performance monitoring
+- **🎨 Modern UI** - Beautiful interface with Tailwind CSS and Radix UI
 
-## Tech Stack
+## 🚀 Quick Start
 
-- **Frontend**: Next.js 14 with TypeScript and App Router
-- **Backend**: Supabase (PostgreSQL, Auth, RLS)
-- **Voice**: Retell AI, Vapi, or Twilio
-- **Email**: Resend
-- **Monitoring**: Sentry
-- **Styling**: Tailwind CSS with Radix UI components
+### Prerequisites
 
-## Quick Start
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
+- Voice provider account (Retell, Vapi, or Twilio)
 
-### 1. Environment Setup
+### Installation
 
-Copy the environment template and configure your services:
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd pharmacy-voice-automation
+   ```
 
-```bash
-cp env.example .env.local
-```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-Fill in your service credentials in `.env.local`.
+3. **Set up environment variables**
+   ```bash
+   cp env.example .env.local
+   ```
+   
+   Fill in your environment variables in `.env.local`:
+   ```env
+   # Supabase Configuration
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   
+   # Voice Provider (choose one)
+   VOICE_PROVIDER=retell # or vapi, twilio
+   RETELL_API_KEY=your_retell_api_key
+   RETELL_AGENT_ID=your_retell_agent_id
+   
+   # Email Configuration
+   RESEND_API_KEY=your_resend_api_key
+   EMAIL_FROM=noreply@yourdomain.com
+   
+   # App Configuration
+   NEXT_PUBLIC_APP_URL=https://your-domain.com
+   APP_ENCRYPTION_KEY=your_32_character_encryption_key
+   ```
 
-### 2. Database Setup
+4. **Set up the database**
+   - Create a new Supabase project
+   - Run the migration: `supabase/migrations/001_initial_schema.sql`
+   - Enable Row Level Security (RLS) policies
 
-Run the Supabase migrations:
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
-```bash
-npm run db:push
-```
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-### 3. Install Dependencies
+## 🗄️ Database Setup
 
-```bash
-npm install
-```
+### Supabase Migration
 
-### 4. Development
+1. **Create a Supabase project** at [supabase.com](https://supabase.com)
 
-```bash
-npm run dev
-```
+2. **Run the migration**:
+   ```sql
+   -- Copy and paste the contents of supabase/migrations/001_initial_schema.sql
+   -- into your Supabase SQL editor and execute
+   ```
 
-Visit `http://localhost:3000` to see the application.
-
-## Configuration
-
-### Voice Providers
-
-The application supports three voice providers:
-
-#### Retell AI
-```env
-VOICE_PROVIDER=retell
-RETELL_API_KEY=your_api_key
-RETELL_AGENT_ID=your_agent_id
-```
-
-#### Vapi
-```env
-VOICE_PROVIDER=vapi
-VAPI_API_KEY=your_api_key
-VAPI_ASSISTANT_ID=your_assistant_id
-VAPI_PHONE_NUMBER_ID=your_phone_number_id
-```
-
-#### Twilio
-```env
-VOICE_PROVIDER=twilio
-TWILIO_ACCOUNT_SID=your_account_sid
-TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=your_phone_number
-```
-
-### Email Configuration
-
-Configure Resend for email notifications:
-
-```env
-RESEND_API_KEY=your_resend_api_key
-EMAIL_FROM=noreply@yourdomain.com
-```
-
-### Monitoring
-
-Set up Sentry for error tracking:
-
-```env
-NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
-SENTRY_ORG=your_sentry_org
-SENTRY_PROJECT=your_sentry_project
-```
-
-## Architecture
+3. **Set up encryption key**:
+   ```sql
+   -- Set your encryption key (replace with your actual key)
+   ALTER SYSTEM SET app.encryption_key = 'your_32_character_encryption_key';
+   ```
 
 ### Database Schema
 
-The application uses a multi-tenant architecture with Row Level Security (RLS):
+The application uses the following main tables:
 
-- **Organizations**: Top-level tenant isolation
-- **Users**: Pharmacists with role-based access
-- **Patients**: PHI-compliant patient data with encryption
-- **Voice Calls**: Call records with transcripts and structured data
-- **Call Logs**: Audit trail for compliance
-- **Email Notifications**: Notification tracking
+- **`organizations`** - Multi-tenant pharmacy organizations
+- **`users`** - Pharmacists and admins with role-based access
+- **`patients`** - PHI-encrypted patient records
+- **`voice_calls`** - Call records with transcripts and structured data
+- **`call_logs`** - Audit trail for compliance
+- **`email_notifications`** - Email tracking and delivery status
 
-### Security Features
+## 🔧 Voice Provider Setup
 
-- **PHI Encryption**: Patient data encrypted at rest
-- **RLS Policies**: Database-level access control
-- **Webhook Verification**: Secure voice provider integration
-- **Compliance Logging**: HIPAA-compliant audit trails
-- **Data Sanitization**: PHI filtering in error logs
+### Retell AI
+1. Sign up at [retellai.com](https://retellai.com)
+2. Create an agent for pharmacy calls
+3. Get your API key and agent ID
+4. Configure webhook URL: `https://your-domain.com/api/voice/webhook`
 
-### API Routes
+### Vapi
+1. Sign up at [vapi.ai](https://vapi.ai)
+2. Create an assistant for pharmacy calls
+3. Get your API key and assistant ID
+4. Configure webhook URL: `https://your-domain.com/api/voice/webhook`
 
-- `/api/calls` - Call management
-- `/api/patients` - Patient management
-- `/api/voice/webhook` - Voice provider webhooks
-- `/api/voice/initiate` - Call initiation
-- `/api/email/process` - Email notification processing
-- `/api/dashboard/stats` - Dashboard statistics
+### Twilio
+1. Sign up at [twilio.com](https://twilio.com)
+2. Get your account SID, auth token, and phone number
+3. Configure webhook URL: `https://your-domain.com/api/voice/webhook`
 
-## Deployment
+## 🚀 Deployment
 
-### Vercel Deployment
+### Vercel (Recommended)
 
-1. Connect your repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy
+1. **Connect your GitHub repository** to Vercel
+2. **Set environment variables** in Vercel dashboard
+3. **Deploy** - Vercel will automatically build and deploy
 
-### Environment Variables
+### Manual Deployment
 
-Ensure all required environment variables are set in your deployment environment.
+1. **Build the application**
+   ```bash
+   npm run build
+   ```
 
-### Database
+2. **Start the production server**
+   ```bash
+   npm start
+   ```
 
-Run migrations in your Supabase project:
-
-```bash
-npm run db:push
-```
-
-## Usage
+## 📱 Usage
 
 ### For Pharmacists
 
-1. **Login**: Access the dashboard with your credentials
-2. **Initiate Calls**: Use the quick actions to start voice calls
-3. **Monitor Progress**: View real-time call status and transcripts
-4. **Review Results**: Access structured data and AI insights
+1. **Login** to the dashboard
+2. **View analytics** - Call statistics and success rates
+3. **Initiate calls** - Use quick actions for common call types
+4. **Review transcripts** - Access call recordings and AI insights
+5. **Manage patients** - View patient profiles and call history
 
-### For Administrators
+### Call Types
 
-1. **User Management**: Manage pharmacist accounts and permissions
-2. **Organization Settings**: Configure voice providers and preferences
-3. **Compliance Monitoring**: Review audit logs and access patterns
+- **Delivery Scheduling** - Automated delivery coordination
+- **Medication Changes** - Handle prescription modifications
+- **Shipment Feedback** - Collect delivery feedback
+- **General Inquiry** - Answer patient questions
 
-## Compliance
+## 🔒 Security & Compliance
 
-This application is designed with healthcare compliance in mind:
+### HIPAA Compliance
+- **PHI Encryption** - All patient data encrypted at rest and in transit
+- **Audit Trails** - Comprehensive logging of all system activities
+- **Access Controls** - Role-based permissions and multi-tenant isolation
+- **Data Retention** - Configurable retention policies
 
-- **HIPAA Compliance**: PHI encryption and access controls
-- **Audit Trails**: Comprehensive logging of all actions
-- **Data Minimization**: Only necessary data is collected and stored
-- **Access Controls**: Role-based permissions and RLS policies
+### Security Features
+- **Row Level Security (RLS)** - Database-level access control
+- **Webhook Verification** - Secure webhook signature validation
+- **Environment Isolation** - Separate configurations per environment
+- **Error Monitoring** - Sentry integration for security monitoring
 
-## Support
+## 🛠️ Development
 
-For technical support or questions about compliance, please contact your system administrator.
+### Project Structure
 
-## License
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (app)/             # Protected app routes
+│   ├── (auth)/            # Authentication pages
+│   └── api/               # API routes
+├── components/            # React components
+│   ├── ui/               # Reusable UI components
+│   └── dashboard/        # Dashboard-specific components
+├── lib/                  # Utility libraries
+│   ├── supabase/         # Database client
+│   ├── voice-agents/     # Voice provider integrations
+│   └── auth.ts           # Authentication utilities
+└── types/                # TypeScript type definitions
+```
 
-This software is proprietary and confidential. Unauthorized distribution is prohibited.
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run type-check` - Run TypeScript checks
+
+### API Endpoints
+
+- `POST /api/voice/initiate` - Start a voice call
+- `POST /api/voice/webhook` - Handle call events
+- `GET /api/dashboard/stats` - Get analytics data
+- `GET /api/calls` - List calls
+- `POST /api/calls` - Create new call
+- `POST /api/email/process` - Send notifications
+
+## 📊 Monitoring
+
+### Sentry Integration
+- Error tracking and performance monitoring
+- HIPAA-compliant logging (no PHI in logs)
+- Real-time alerts for critical issues
+
+### Analytics
+- Call success rates and duration metrics
+- Patient engagement statistics
+- Voice agent performance insights
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Documentation**: Check this README and inline code comments
+- **Issues**: Open a GitHub issue for bugs or feature requests
+- **Security**: Report security issues privately to security@yourdomain.com
+
+## 🎯 Roadmap
+
+- [ ] Advanced AI conversation analytics
+- [ ] Multi-language support
+- [ ] Mobile app for pharmacists
+- [ ] Integration with more pharmacy management systems
+- [ ] Advanced reporting and business intelligence
+- [ ] Voice biometric authentication
+
+---
+
+Built with ❤️ for specialty pharmacies

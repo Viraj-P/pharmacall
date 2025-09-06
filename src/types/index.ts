@@ -84,6 +84,18 @@ export interface VoiceProviderConfig {
   settings: Record<string, any>
 }
 
+export interface VoiceAgent {
+  initiateCall(
+    patientPhone: string,
+    pharmacistPhone: string,
+    callData: CallInitiationRequest,
+    callRecord: VoiceCall
+  ): Promise<{ call_id: string; status: string }>
+  
+  getCallStatus(callId: string): Promise<any>
+  endCall(callId: string): Promise<void>
+}
+
 export interface CallInitiationRequest {
   patient_id: string
   call_type: CallType

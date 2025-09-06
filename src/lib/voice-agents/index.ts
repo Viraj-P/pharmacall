@@ -1,21 +1,9 @@
 import { RetellVoiceAgent, RetellConfig } from './retell'
 import { VapiVoiceAgent, VapiConfig } from './vapi'
 import { TwilioVoiceAgent, TwilioConfig } from './twilio'
-import { CallInitiationRequest, VoiceCall, VoiceProviderConfig } from '@/types'
+import { CallInitiationRequest, VoiceCall, VoiceProviderConfig, VoiceAgent } from '@/types'
 
 export type VoiceProvider = 'retell' | 'vapi' | 'twilio'
-
-export interface VoiceAgent {
-  initiateCall(
-    patientPhone: string,
-    pharmacistPhone: string,
-    callData: CallInitiationRequest,
-    callRecord: VoiceCall
-  ): Promise<{ call_id: string; status: string }>
-  
-  getCallStatus(callId: string): Promise<any>
-  endCall(callId: string): Promise<void>
-}
 
 export class VoiceAgentFactory {
   static createAgent(config: VoiceProviderConfig): VoiceAgent {

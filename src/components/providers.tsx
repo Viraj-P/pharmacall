@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             email: authUser.email!,
             role: profile.role as any,
             organization_id: profile.organization_id,
-            organization_name: profile.organizations.name
+            organization_name: (profile.organizations as any).name
           })
         }
       }
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               email: session.user.email!,
               role: profile.role as any,
               organization_id: profile.organization_id,
-              organization_name: profile.organizations.name
+              organization_name: (profile.organizations as any).name
             })
           }
         } else {
@@ -105,4 +105,12 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
+}
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      {children}
+    </AuthProvider>
+  )
 }

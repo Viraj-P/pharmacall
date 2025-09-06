@@ -1,4 +1,4 @@
-import { CallInitiationRequest, VoiceCall } from '@/types'
+import { VoiceAgent, CallInitiationRequest, VoiceCall } from '@/types'
 
 export interface VapiConfig {
   api_key: string
@@ -6,22 +6,7 @@ export interface VapiConfig {
   webhook_url: string
 }
 
-export interface VapiCallRequest {
-  phoneNumberId: string
-  customer: {
-    number: string
-  }
-  assistantId: string
-  customerId?: string
-  metadata?: Record<string, any>
-}
-
-export interface VapiCallResponse {
-  id: string
-  status: string
-}
-
-export class VapiVoiceAgent {
+export class VapiVoiceAgent implements VoiceAgent {
   private config: VapiConfig
   private baseUrl = 'https://api.vapi.ai'
 
@@ -31,85 +16,75 @@ export class VapiVoiceAgent {
 
   async initiateCall(
     patientPhone: string,
+    pharmacistPhone: string,
     callData: CallInitiationRequest,
     callRecord: VoiceCall
-  ): Promise<VapiCallResponse> {
-    const request: VapiCallRequest = {
-      phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID!, // Your Vapi phone number ID
-      customer: {
-        number: patientPhone,
+  ): Promise<{ call_id: string; status: string }> {
+    const response = await fetch(`${this.baseUrl}/call`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.config.api_key}`,
+        'Content-Type': 'application/json',
       },
-      assistantId: this.config.assistant_id,
-      customerId: callRecord.patient_id,
-      metadata: {
-        call_id: callRecord.id,
-        organization_id: callRecord.organization_id,
-        patient_id: callRecord.patient_id,
-        call_type: callData.call_type,
-        custom_prompt: callData.custom_prompt,
-      }
+      body: JSON.stringify({
+        assistantId: this.config.assistant_id,
+        customer: {
+          number: patientPhone,
+        },
+        phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID, // This should be in config
+        webhookUrl: this.config.webhook_url,
+        metadata: {
+          call_id: callRecord.id,
+          organization_id: callRecord.organization_id,
+          call_type: callData.call_type,
+          custom_prompt: callData.custom_prompt,
+        },
+        assistantOverrides: {
+          variableValues: {
+            patient_name: 'Patient', // In production, this would be decrypted
+            call_type: callData.call_type,
+            pharmacist_name: 'Pharmacist', // In production, this would come from user profile
+          }
+        }
+      })
+    })
+
+    if (!response.ok) {
+      const error = await response.text()
+      throw new Error(`Vapi API error: ${error}`)
     }
 
-    try {
-      const response = await fetch(`${this.baseUrl}/call`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.config.api_key}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(request),
-      })
-
-      if (!response.ok) {
-        const error = await response.text()
-        throw new Error(`Vapi API error: ${error}`)
-      }
-
-      const result = await response.json()
-      return {
-        id: result.id,
-        status: result.status || 'queued'
-      }
-    } catch (error) {
-      console.error('Failed to initiate Vapi call:', error)
-      throw error
+    const result = await response.json()
+    return {
+      call_id: result.id,
+      status: result.status || 'initiated'
     }
   }
 
   async getCallStatus(callId: string): Promise<any> {
-    try {
-      const response = await fetch(`${this.baseUrl}/call/${callId}`, {
-        headers: {
-          'Authorization': `Bearer ${this.config.api_key}`,
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error(`Failed to get call status: ${response.statusText}`)
+    const response = await fetch(`${this.baseUrl}/call/${callId}`, {
+      headers: {
+        'Authorization': `Bearer ${this.config.api_key}`,
       }
+    })
 
-      return await response.json()
-    } catch (error) {
-      console.error('Failed to get call status:', error)
-      throw error
+    if (!response.ok) {
+      throw new Error(`Failed to get call status: ${response.statusText}`)
     }
+
+    return response.json()
   }
 
   async endCall(callId: string): Promise<void> {
-    try {
-      const response = await fetch(`${this.baseUrl}/call/${callId}/end`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.config.api_key}`,
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error(`Failed to end call: ${response.statusText}`)
+    const response = await fetch(`${this.baseUrl}/call/${callId}/end`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.config.api_key}`,
       }
-    } catch (error) {
-      console.error('Failed to end call:', error)
-      throw error
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to end call: ${response.statusText}`)
     }
   }
 }

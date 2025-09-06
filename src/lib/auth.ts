@@ -40,7 +40,7 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     email: user.email!,
     role: profile.role as UserRole,
     organization_id: profile.organization_id,
-    organization_name: profile.organizations.name
+    organization_name: (profile.organizations as any).name
   }
 }
 
