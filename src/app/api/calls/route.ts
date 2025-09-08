@@ -31,7 +31,7 @@ export async function GET() {
     // Format the response
     const formattedCalls = calls?.map(call => ({
       id: call.id,
-      patient_phone: call.patients?.encrypted_phone || 'Unknown',
+      patient_phone: (call.patients as any)?.encrypted_phone || 'Unknown',
       call_type: call.call_type,
       status: call.status,
       created_at: call.created_at,
