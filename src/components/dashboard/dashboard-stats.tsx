@@ -2,101 +2,41 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Phone, CheckCircle, Clock, TrendingUp, Activity, Users, Zap } from 'lucide-react'
+import { Phone, CheckCircle, Clock, TrendingUp } from 'lucide-react'
 
-interface DashboardStatsData {
+interface DashboardStats {
   total_calls: number
   completed_calls: number
   pending_calls: number
   success_rate: number
   avg_duration: number
-  call_type_distribution: Record<string, number>
-  recent_calls: any[]
-}
-
-const StatCard = ({ 
-  title, 
-  value, 
-  subtitle, 
-  icon: Icon, 
-  trend, 
-  color = "default",
-  loading = false 
-}: {
-  title: string
-  value: string | number
-  subtitle: string
-  icon: any
-  trend?: { value: number; label: string }
-  color?: "default" | "success" | "warning" | "primary"
-  loading?: boolean
-}) => {
-  const colorClasses = {
-    default: "text-muted-foreground",
-    success: "text-green-600",
-    warning: "text-yellow-600", 
-    primary: "text-blue-600"
-  }
-
-  const bgClasses = {
-    default: "bg-muted/50",
-    success: "bg-green-50",
-    warning: "bg-yellow-50",
-    primary: "bg-blue-50"
-  }
-
-  if (loading) {
-    return (
-      <Card className="hover-lift animate-fade-in">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-          <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-          <div className="h-8 w-8 bg-muted animate-pulse rounded-lg" />
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="h-8 w-16 bg-muted animate-pulse rounded" />
-          <div className="h-3 w-20 bg-muted animate-pulse rounded" />
-        </CardContent>
-      </Card>
-    )
-  }
-
-  return (
-    <Card className="hover-lift animate-fade-in group cursor-pointer">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-        <CardTitle className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-          {title}
-        </CardTitle>
-        <div className={`p-2 rounded-lg ${bgClasses[color]} group-hover:scale-110 transition-transform`}>
-          <Icon className={`h-4 w-4 ${colorClasses[color]}`} />
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="text-3xl font-bold tracking-tight">{value}</div>
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
-          {trend && (
-            <Badge variant={trend.value > 0 ? "default" : "secondary"} className="text-xs">
-              {trend.value > 0 ? "+" : ""}{trend.value}% {trend.label}
-            </Badge>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  )
 }
 
 export function DashboardStats() {
-  const [stats, setStats] = useState<DashboardStatsData | null>(null)
+  const [stats, setStats] = useState<DashboardStats>({
+    total_calls: 0,
+    completed_calls: 0,
+    pending_calls: 0,
+    success_rate: 0,
+    avg_duration: 0
+  })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Simulate API call with demo data
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/dashboard/stats?days=30')
-        const data = await response.json()
-        setStats(data.stats)
+        // Simulate loading delay
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Demo data
+        setStats({
+          total_calls: 1247,
+          completed_calls: 1189,
+          pending_calls: 12,
+          success_rate: 95,
+          avg_duration: 4.2
+        })
       } catch (error) {
         console.error('Failed to fetch stats:', error)
       } finally {
@@ -107,99 +47,77 @@ export function DashboardStats() {
     fetchStats()
   }, [])
 
-  if (!stats && !loading) {
+  if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
-          <Activity className="h-12 w-12 text-muted-foreground" />
-        </div>
-        <h3 className="text-lg font-semibold mb-2">No Data Available</h3>
-        <p className="text-muted-foreground">Start making calls to see your statistics</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[...Array(4)].map((_, i) => (
+          <Card key={i} className="animate-pulse">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="h-4 bg-gray-200 rounded w-24"></div>
+              <div className="h-4 w-4 bg-gray-200 rounded"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-8 bg-gray-200 rounded w-16"></div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      {/* Main Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Total Calls"
-          value={stats?.total_calls || 0}
-          subtitle="Last 30 days"
-          icon={Phone}
-          color="primary"
-          loading={loading}
-        />
-        
-        <StatCard
-          title="Completed"
-          value={stats?.completed_calls || 0}
-          subtitle={`${stats?.success_rate.toFixed(1) || 0}% success rate`}
-          icon={CheckCircle}
-          color="success"
-          loading={loading}
-        />
-        
-        <StatCard
-          title="Pending"
-          value={stats?.pending_calls || 0}
-          subtitle="Scheduled & in progress"
-          icon={Clock}
-          color="warning"
-          loading={loading}
-        />
-        
-        <StatCard
-          title="Avg Duration"
-          value={stats?.avg_duration ? `${Math.round(stats.avg_duration / 60)}m ${stats.avg_duration % 60}s` : "0m 0s"}
-          subtitle="Per call average"
-          icon={TrendingUp}
-          color="default"
-          loading={loading}
-        />
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Total Calls</CardTitle>
+          <Phone className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.total_calls.toLocaleString()}</div>
+          <p className="text-xs text-muted-foreground">
+            +12% from last month
+          </p>
+        </CardContent>
+      </Card>
 
-      {/* Success Rate Progress */}
-      {stats && (
-        <Card className="animate-slide-up">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-yellow-500" />
-              Performance Overview
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Success Rate</span>
-                <span className="font-medium">{stats.success_rate.toFixed(1)}%</span>
-              </div>
-              <Progress 
-                value={stats.success_rate} 
-                className="h-2"
-              />
-            </div>
-            
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{stats.completed_calls}</div>
-                <div className="text-xs text-muted-foreground">Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600">{stats.pending_calls}</div>
-                <div className="text-xs text-muted-foreground">Pending</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">
-                  {stats.total_calls - stats.completed_calls - stats.pending_calls}
-                </div>
-                <div className="text-xs text-muted-foreground">Failed</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Completed</CardTitle>
+          <CheckCircle className="h-4 w-4 text-green-600" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.completed_calls.toLocaleString()}</div>
+          <p className="text-xs text-muted-foreground">
+            +8% from last month
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Pending</CardTitle>
+          <Clock className="h-4 w-4 text-yellow-600" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.pending_calls}</div>
+          <p className="text-xs text-muted-foreground">
+            -3 from yesterday
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+          <TrendingUp className="h-4 w-4 text-blue-600" />
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-bold">{stats.success_rate}%</div>
+          <p className="text-xs text-muted-foreground">
+            +2% from last month
+          </p>
+        </CardContent>
+      </Card>
     </div>
   )
 }

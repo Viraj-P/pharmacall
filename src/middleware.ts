@@ -6,9 +6,9 @@ export async function middleware(request: NextRequest) {
     request,
   })
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
-  
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://gludecsofmdzvbmvjxoc.supabase.co'
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdWRlY3NvZm1kenZibXZqeG9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxODkyMzUsImV4cCI6MjA3Mjc2NTIzNX0.eMSfKVRUG5etDaUeYchqSlW5TehmeFLrXPvY15UbZa8'
+
   const supabase = createServerClient(
     supabaseUrl,
     supabaseKey,
@@ -38,18 +38,21 @@ export async function middleware(request: NextRequest) {
   // Refresh session if expired - required for Server Components
   await supabase.auth.getUser()
 
+  // Check if user is trying to access protected routes
   const { data: { user } } = await supabase.auth.getUser()
-  const isAuthPage = request.nextUrl.pathname.startsWith('/auth')
-  const isPublicPage = request.nextUrl.pathname === '/' || request.nextUrl.pathname.startsWith('/api')
+  const isAuthPage = request.nextUrl.pathname.startsWith('/auth/')
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || 
+                          request.nextUrl.pathname.startsWith('/audits') ||
+                          request.nextUrl.pathname.startsWith('/new')
 
-  // Redirect authenticated users away from auth pages
-  if (user && isAuthPage) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  // Redirect to login if accessing protected route without auth
+  if (isProtectedRoute && !user) {
+    return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  // Redirect unauthenticated users to login (except public pages)
-  if (!user && !isAuthPage && !isPublicPage) {
-    return NextResponse.redirect(new URL('/auth/login', request.url))
+  // Redirect to dashboard if accessing auth page while logged in
+  if (isAuthPage && user) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return supabaseResponse
@@ -62,8 +65,9 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - api (API routes)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }

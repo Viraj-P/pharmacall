@@ -3,25 +3,6 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase_service_role_key",
-    "RESEND_API_KEY": "@resend_api_key",
-    "VOICE_PROVIDER": "@voice_provider",
-    "RETELL_API_KEY": "@retell_api_key",
-    "RETELL_AGENT_ID": "@retell_agent_id",
-    "VAPI_API_KEY": "@vapi_api_key",
-    "VAPI_ASSISTANT_ID": "@vapi_assistant_id",
-    "VAPI_PHONE_NUMBER_ID": "@vapi_phone_number_id",
-    "TWILIO_ACCOUNT_SID": "@twilio_account_sid",
-    "TWILIO_AUTH_TOKEN": "@twilio_auth_token",
-    "TWILIO_PHONE_NUMBER": "@twilio_phone_number",
-    "NEXT_PUBLIC_APP_URL": "@app_url",
-    "APP_ENCRYPTION_KEY": "@encryption_key",
-    "VOICE_WEBHOOK_SECRET": "@webhook_secret",
-    "PHARMACIST_PHONE_NUMBER": "@pharmacist_phone"
-  },
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 30

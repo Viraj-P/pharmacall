@@ -1,80 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const user = await requireAuth()
     const supabase = await createClient()
-    
-    const { searchParams } = new URL(request.url)
-    const days = parseInt(searchParams.get('days') || '30')
 
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - days)
-
-    // Get call statistics
-    const { data: calls, error: callsError } = await supabase
+    // Get call statistics for the user's organization
+    const { data: calls, error } = await supabase
       .from('voice_calls')
-      .select('status, duration_seconds, call_type, created_at')
+      .select('status, duration_seconds')
       .eq('organization_id', user.organization_id)
-      .gte('created_at', startDate.toISOString())
 
-    if (callsError) {
-      return NextResponse.json({ error: callsError.message }, { status: 500 })
+    if (error) {
+      console.error('Error fetching calls:', error)
+      return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 })
     }
 
-    // Calculate statistics
-    const totalCalls = calls.length
-    const completedCalls = calls.filter(call => call.status === 'completed').length
-    const pendingCalls = calls.filter(call => ['scheduled', 'in_progress'].includes(call.status)).length
-    const successRate = totalCalls > 0 ? (completedCalls / totalCalls) * 100 : 0
+    const totalCalls = calls?.length || 0
+    const completedCalls = calls?.filter(call => call.status === 'completed').length || 0
+    const pendingCalls = calls?.filter(call => call.status === 'scheduled' || call.status === 'in_progress').length || 0
+    const successRate = totalCalls > 0 ? Math.round((completedCalls / totalCalls) * 100) : 0
     
-    const completedCallsWithDuration = calls.filter(call => 
-      call.status === 'completed' && call.duration_seconds
-    )
-    const avgDuration = completedCallsWithDuration.length > 0 
-      ? completedCallsWithDuration.reduce((sum, call) => sum + (call.duration_seconds || 0), 0) / completedCallsWithDuration.length
+    const completedCallsWithDuration = calls?.filter(call => call.status === 'completed' && call.duration_seconds)
+    const avgDuration = completedCallsWithDuration?.length > 0 
+      ? Math.round(completedCallsWithDuration.reduce((sum, call) => sum + (call.duration_seconds || 0), 0) / completedCallsWithDuration.length)
       : 0
 
-    // Call type distribution
-    const callTypeDistribution = calls.reduce((acc, call) => {
-      acc[call.call_type] = (acc[call.call_type] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
-
-    // Recent calls (last 5)
-    const { data: recentCalls, error: recentError } = await supabase
-      .from('voice_calls')
-      .select(`
-        id,
-        call_type,
-        status,
-        duration_seconds,
-        created_at,
-        completed_at,
-        scheduled_at
-      `)
-      .eq('organization_id', user.organization_id)
-      .order('created_at', { ascending: false })
-      .limit(5)
-
-    if (recentError) {
-      console.error('Error fetching recent calls:', recentError)
-    }
-
-    const stats = {
+    return NextResponse.json({
       total_calls: totalCalls,
       completed_calls: completedCalls,
       pending_calls: pendingCalls,
       success_rate: successRate,
-      avg_duration: avgDuration,
-      call_type_distribution: callTypeDistribution,
-      recent_calls: recentCalls || []
-    }
-
-    return NextResponse.json({ stats })
+      avg_duration: avgDuration
+    })
   } catch (error) {
+    console.error('Error in stats API:', error)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 }

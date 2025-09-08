@@ -1,113 +1,127 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { NextResponse } from 'next/server'
 import { requireAuth } from '@/lib/auth'
+import { createClient } from '@/lib/supabase/server'
 import { VoiceAgentFactory, getDefaultVoiceConfig } from '@/lib/voice-agents'
-import { CallInitiationRequest } from '@/types'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const user = await requireAuth()
     const supabase = await createClient()
+    const body = await request.json()
     
-    const body: CallInitiationRequest = await request.json()
-    const { patient_id, call_type, scheduled_at, custom_prompt } = body
+    const { patient_phone, call_type, custom_prompt } = body
 
-    // Get patient information
-    const { data: patient, error: patientError } = await supabase
-      .from('patients')
-      .select('id, encrypted_phone, organization_id')
-      .eq('id', patient_id)
-      .eq('organization_id', user.organization_id)
-      .single()
-
-    if (patientError || !patient) {
-      return NextResponse.json({ error: 'Patient not found' }, { status: 404 })
+    if (!patient_phone || !call_type) {
+      return NextResponse.json(
+        { error: 'Patient phone and call type are required' },
+        { status: 400 }
+      )
     }
 
-    // Get pharmacist phone number (in production, this would be from user profile)
-    const pharmacistPhone = process.env.PHARMACIST_PHONE_NUMBER || '+1234567890'
+    // Create a patient record if it doesn't exist
+    const { data: existingPatient } = await supabase
+      .from('patients')
+      .select('id')
+      .eq('organization_id', user.organization_id)
+      .eq('encrypted_phone', patient_phone)
+      .single()
 
-    // Create call record first
-    const { data: call, error: callError } = await supabase
+    let patientId = existingPatient?.id
+
+    if (!patientId) {
+      const { data: newPatient, error: patientError } = await supabase
+        .from('patients')
+        .insert({
+          organization_id: user.organization_id,
+          encrypted_phone: patient_phone,
+          patient_id_hash: `patient_${Date.now()}`,
+          medications: [],
+          preferences: {}
+        })
+        .select('id')
+        .single()
+
+      if (patientError) {
+        console.error('Error creating patient:', patientError)
+        return NextResponse.json({ error: 'Failed to create patient record' }, { status: 500 })
+      }
+
+      patientId = newPatient.id
+    }
+
+    // Create voice call record
+    const { data: callRecord, error: callError } = await supabase
       .from('voice_calls')
       .insert({
         organization_id: user.organization_id,
-        patient_id,
+        patient_id: patientId,
         pharmacist_id: user.id,
         call_type,
         status: 'scheduled',
-        scheduled_at: scheduled_at || new Date().toISOString(),
-        structured_data: {
-          custom_prompt
-        }
+        structured_data: {},
+        ai_insights: {}
       })
-      .select()
+      .select('id')
       .single()
 
     if (callError) {
-      return NextResponse.json({ error: callError.message }, { status: 500 })
+      console.error('Error creating call record:', callError)
+      return NextResponse.json({ error: 'Failed to create call record' }, { status: 500 })
     }
 
-    try {
-      // Get voice agent configuration
-      const voiceConfig = getDefaultVoiceConfig()
-      const voiceAgent = VoiceAgentFactory.createAgent(voiceConfig)
+    // Initialize voice agent
+    const voiceConfig = getDefaultVoiceConfig()
+    const voiceAgent = VoiceAgentFactory.createAgent(voiceConfig)
 
-      // Initiate the call
+    // For demo purposes, we'll use a placeholder pharmacist phone
+    // In production, this would come from the user's profile
+    const pharmacistPhone = '+15551234567' // This should be configurable
+
+    try {
       const result = await voiceAgent.initiateCall(
-        patient.encrypted_phone, // In production, this would be decrypted
+        patient_phone,
         pharmacistPhone,
-        body,
-        call
+        {
+          patient_id: patientId,
+          call_type,
+          custom_prompt
+        },
+        {
+          id: callRecord.id,
+          organization_id: user.organization_id,
+          patient_id: patientId,
+          pharmacist_id: user.id,
+          call_type,
+          status: 'scheduled',
+          structured_data: {},
+          ai_insights: {},
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
       )
 
-      // Update call with external call ID
+      // Update call record with external call ID
       await supabase
         .from('voice_calls')
         .update({
           external_call_id: result.call_id,
           status: 'in_progress'
         })
-        .eq('id', call.id)
-
-      // Log the call initiation
-      await supabase
-        .from('call_logs')
-        .insert({
-          call_id: call.id,
-          organization_id: user.organization_id,
-          event_type: 'call_initiated',
-          event_data: {
-            pharmacist_id: user.id,
-            call_type,
-            external_call_id: result.call_id,
-            voice_provider: voiceConfig.provider
-          }
-        })
+        .eq('id', callRecord.id)
 
       return NextResponse.json({
-        call_id: call.id,
-        external_call_id: result.call_id,
-        status: result.status
+        call_id: result.call_id,
+        status: result.status,
+        message: 'Call initiated successfully'
       })
     } catch (voiceError) {
+      console.error('Error initiating voice call:', voiceError)
+      
       // Update call status to failed
       await supabase
         .from('voice_calls')
         .update({ status: 'failed' })
-        .eq('id', call.id)
-
-      // Log the error
-      await supabase
-        .from('call_logs')
-        .insert({
-          call_id: call.id,
-          organization_id: user.organization_id,
-          event_type: 'call_failed',
-          event_data: {
-            error: voiceError instanceof Error ? voiceError.message : 'Unknown error'
-          }
-        })
+        .eq('id', callRecord.id)
 
       return NextResponse.json(
         { error: 'Failed to initiate voice call' },
@@ -115,6 +129,7 @@ export async function POST(request: NextRequest) {
       )
     }
   } catch (error) {
+    console.error('Error in voice initiate API:', error)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 }

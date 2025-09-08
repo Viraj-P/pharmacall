@@ -1,14 +1,5 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { Providers } from '@/components/providers'
-
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Pharmacy Voice Automation',
-  description: 'AI-powered voice call automation for specialty pharmacies',
-}
+import "./globals.css"
+import { Providers } from "@/components/providers"
 
 export default function RootLayout({
   children,
@@ -17,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <Providers>
           {children}
         </Providers>
