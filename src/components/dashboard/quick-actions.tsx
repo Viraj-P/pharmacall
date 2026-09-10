@@ -58,7 +58,7 @@ export function QuickActions() {
       case 'initiating':
         return {
           message: 'Initiating AI voice call...',
-          color: 'text-blue-600',
+          color: 'text-teal-600',
           icon: <Loader2 className="h-4 w-4 animate-spin" />
         }
       case 'success':
@@ -84,7 +84,7 @@ export function QuickActions() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Phone className="h-5 w-5 text-blue-600" />
+          <Phone className="h-5 w-5 text-teal-600" />
           Initiate AI Voice Call
         </CardTitle>
       </CardHeader>
@@ -140,7 +140,7 @@ export function QuickActions() {
           <div className={`flex items-center gap-2 p-3 rounded-lg ${
             callStatus === 'success' ? 'bg-green-50 border border-green-200' :
             callStatus === 'error' ? 'bg-red-50 border border-red-200' :
-            'bg-blue-50 border border-blue-200'
+            'bg-teal-50 border border-teal-200'
           }`}>
             {statusInfo.icon}
             <span className={`text-sm font-medium ${statusInfo.color}`}>

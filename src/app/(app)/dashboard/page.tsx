@@ -17,8 +17,8 @@ export default async function DashboardPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600">Welcome back, {user.email}</p>
-        <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800">
-          <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+        <div className="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm bg-teal-100 text-teal-800">
+          <span className="w-2 h-2 bg-teal-500 rounded-full mr-2"></span>
           Demo Mode - All features functional
         </div>
       </div>

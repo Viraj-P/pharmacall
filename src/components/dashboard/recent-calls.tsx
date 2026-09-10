@@ -83,7 +83,7 @@ export function RecentCalls() {
       case 'failed':
         return <XCircle className="h-4 w-4 text-red-600" />
       case 'in_progress':
-        return <Phone className="h-4 w-4 text-blue-600" />
+        return <Phone className="h-4 w-4 text-teal-600" />
       default:
         return <Clock className="h-4 w-4 text-yellow-600" />
     }

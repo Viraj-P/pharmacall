@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Phone } from 'lucide-react'
 
 interface AppHeaderProps {
   user: {
@@ -23,30 +24,28 @@ export function AppHeader({ user }: AppHeaderProps) {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4">
+    <header className="bg-[#0c1220] border-b border-white/10 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"></div>
-              </div>
+            <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+              <Phone className="h-4 w-4 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
-              PharmaCall
+            <span className="text-xl font-semibold tracking-tight text-[#f0ece6]">
+              PharmCall
             </span>
           </div>
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-[#f0ece6]/60">
             {user.organization_name}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-white/10">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-teal-600/20 text-teal-300 text-sm">
                     {user.email.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>

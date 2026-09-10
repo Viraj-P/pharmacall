@@ -27,21 +27,21 @@ export default async function NewCallPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-start space-x-3">
-            <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">1</div>
+            <div className="w-6 h-6 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-sm font-medium">1</div>
             <div>
               <h3 className="font-medium">Enter patient details</h3>
               <p className="text-sm text-gray-600">Provide the patient's phone number and select the call type</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
-            <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">2</div>
+            <div className="w-6 h-6 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-sm font-medium">2</div>
             <div>
               <h3 className="font-medium">AI agent initiates call</h3>
               <p className="text-sm text-gray-600">Our AI voice agent will call the patient and handle the conversation</p>
             </div>
           </div>
           <div className="flex items-start space-x-3">
-            <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium">3</div>
+            <div className="w-6 h-6 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center text-sm font-medium">3</div>
             <div>
               <h3 className="font-medium">Review results</h3>
               <p className="text-sm text-gray-600">View the call transcript, summary, and any follow-up actions needed</p>

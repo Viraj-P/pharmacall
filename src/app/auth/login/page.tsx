@@ -48,100 +48,42 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #e0e7ff 100%)',
-      fontFamily: 'system-ui, sans-serif'
-    }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
+    <div className="min-h-screen bg-[#fafaf8] font-sans">
+      <div className="mx-auto max-w-[1200px] px-6 py-8">
         {/* Back to Home */}
-        <Link href="/" style={{ 
-          display: 'inline-flex', 
-          alignItems: 'center', 
-          color: '#3b82f6', 
-          textDecoration: 'none',
-          marginBottom: '2rem',
-          fontWeight: '500',
-          transition: 'color 0.2s'
-        }}>
-          <ArrowLeft style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
+        <Link
+          href="/"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-teal-600 transition-colors hover:text-teal-700"
+        >
+          <ArrowLeft className="h-4 w-4" />
           Back to Home
         </Link>
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1fr 1fr', 
-          gap: '4rem', 
-          alignItems: 'center',
-          minHeight: 'calc(100vh - 8rem)'
-        }}>
+        <div className="grid min-h-[calc(100vh-10rem)] items-center gap-16 lg:grid-cols-2">
           {/* Left Side - Login Form */}
           <div>
-            <Card style={{ 
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              border: 'none',
-              borderRadius: '1rem',
-              overflow: 'hidden'
-            }}>
-              <CardHeader style={{ 
-                textAlign: 'center', 
-                padding: '3rem 2rem 2rem 2rem',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                color: 'white'
-              }}>
-                <div style={{
-                  width: '4rem',
-                  height: '4rem',
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1.5rem auto',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <div style={{
-                    width: '2rem',
-                    height: '2rem',
-                    background: 'white',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <div style={{
-                      width: '1rem',
-                      height: '1rem',
-                      background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                      borderRadius: '50%'
-                    }}></div>
+            <Card className="overflow-hidden rounded-2xl border-0 shadow-2xl shadow-black/10">
+              <CardHeader className="bg-[#0c1220] px-8 pb-8 pt-10 text-center">
+                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-teal-600/20 backdrop-blur-sm">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+                    <div className="h-4 w-4 rounded-full bg-teal-600"></div>
                   </div>
                 </div>
-                <CardTitle style={{ 
-                  fontSize: '2rem', 
-                  fontWeight: 'bold',
-                  marginBottom: '0.5rem'
-                }}>
+                <CardTitle className="mb-2 font-serif text-3xl font-bold text-[#f0ece6]">
                   Welcome Back
                 </CardTitle>
-                <CardDescription style={{ 
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  fontSize: '1.125rem'
-                }}>
-                  Sign in to your PharmaCall account
+                <CardDescription className="text-lg text-[#f0ece6]/70">
+                  Sign in to your PharmCall account
                 </CardDescription>
               </CardHeader>
-              
-              <CardContent style={{ padding: '2rem' }}>
-                <form onSubmit={handleLogin} style={{ marginBottom: '2rem' }}>
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <Label htmlFor="email" style={{ 
-                      display: 'block', 
-                      fontSize: '0.875rem', 
-                      fontWeight: '600', 
-                      color: '#374151',
-                      marginBottom: '0.5rem'
-                    }}>
+
+              <CardContent className="p-8">
+                <form onSubmit={handleLogin} className="mb-8">
+                  <div className="mb-6">
+                    <Label
+                      htmlFor="email"
+                      className="mb-2 block text-sm font-semibold text-gray-700"
+                    >
                       Email Address
                     </Label>
                     <Input
@@ -151,25 +93,15 @@ export default function LoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      style={{
-                        padding: '0.875rem 1rem',
-                        border: '2px solid #e5e7eb',
-                        borderRadius: '0.75rem',
-                        fontSize: '1rem',
-                        transition: 'all 0.2s',
-                        backgroundColor: '#f9fafb'
-                      }}
+                      className="rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 text-base transition-colors focus:border-teal-500 focus:ring-teal-500"
                     />
                   </div>
-                  
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <Label htmlFor="password" style={{ 
-                      display: 'block', 
-                      fontSize: '0.875rem', 
-                      fontWeight: '600', 
-                      color: '#374151',
-                      marginBottom: '0.5rem'
-                    }}>
+
+                  <div className="mb-6">
+                    <Label
+                      htmlFor="password"
+                      className="mb-2 block text-sm font-semibold text-gray-700"
+                    >
                       Password
                     </Label>
                     <Input
@@ -179,90 +111,41 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      style={{
-                        padding: '0.875rem 1rem',
-                        border: '2px solid #e5e7eb',
-                        borderRadius: '0.75rem',
-                        fontSize: '1rem',
-                        transition: 'all 0.2s',
-                        backgroundColor: '#f9fafb'
-                      }}
+                      className="rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 text-base transition-colors focus:border-teal-500 focus:ring-teal-500"
                     />
                   </div>
 
                   {error && (
-                    <div style={{ 
-                      fontSize: '0.875rem', 
-                      color: '#dc2626', 
-                      backgroundColor: '#fef2f2', 
-                      padding: '0.75rem 1rem', 
-                      borderRadius: '0.5rem',
-                      marginBottom: '1rem',
-                      border: '1px solid #fecaca'
-                    }}>
+                    <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
                       {error}
                     </div>
                   )}
 
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     disabled={loading}
-                    style={{
-                      width: '100%',
-                      padding: '0.875rem 1rem',
-                      background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '0.75rem',
-                      fontSize: '1rem',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }}
+                    className="w-full rounded-xl bg-teal-600 py-3 text-base font-semibold text-white shadow-lg shadow-teal-600/20 transition-all hover:bg-teal-700 hover:shadow-teal-700/25"
                   >
                     {loading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
 
-                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                  <a href="#" style={{ 
-                    color: '#3b82f6', 
-                    textDecoration: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '500'
-                  }}>
+                <div className="mb-8 text-center">
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-teal-600 transition-colors hover:text-teal-700"
+                  >
                     Forgot your password?
                   </a>
                 </div>
 
-                <div style={{ 
-                  borderTop: '1px solid #e5e7eb', 
-                  paddingTop: '2rem',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280',
-                    marginBottom: '1rem'
-                  }}>
+                <div className="border-t border-gray-200 pt-8 text-center">
+                  <div className="mb-4 text-sm text-gray-500">
                     Want to try the demo?
                   </div>
-                  <Button 
+                  <Button
                     onClick={handleDemoLogin}
-                    style={{
-                      width: '100%',
-                      padding: '0.875rem 1rem',
-                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '0.75rem',
-                      fontSize: '1rem',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                    }}
+                    className="w-full rounded-xl bg-emerald-600 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-emerald-700/25"
                   >
                     Try Demo Dashboard
                   </Button>
@@ -272,254 +155,93 @@ export default function LoginPage() {
           </div>
 
           {/* Right Side - Features & Info */}
-          <div style={{ padding: '2rem' }}>
-            <div style={{ marginBottom: '3rem' }}>
-              <h2 style={{ 
-                fontSize: '2.5rem', 
-                fontWeight: 'bold', 
-                color: '#111827',
-                marginBottom: '1rem',
-                lineHeight: '1.2'
-              }}>
+          <div className="p-4 lg:p-8">
+            <div className="mb-10">
+              <h2 className="mb-4 font-serif text-4xl leading-tight tracking-tight text-[#1c1c1e] lg:text-5xl">
                 AI-Powered Pharmacy
-                <span style={{ 
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}> Voice Automation</span>
+                <span className="text-teal-600"> Voice Automation</span>
               </h2>
-              <p style={{ 
-                fontSize: '1.125rem', 
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '2rem'
-              }}>
-                Transform your pharmacy operations with intelligent voice agents that handle patient calls, medication management, and delivery scheduling 24/7.
+              <p className="mb-8 text-lg leading-relaxed text-[#6b7280]">
+                Transform your pharmacy operations with intelligent voice agents
+                that handle patient calls, medication management, and delivery
+                scheduling 24/7.
               </p>
             </div>
 
             {/* Features Grid */}
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(2, 1fr)', 
-              gap: '1.5rem',
-              marginBottom: '3rem'
-            }}>
-              <div style={{
-                backgroundColor: 'white',
-                padding: '1.5rem',
-                borderRadius: '1rem',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb'
-              }}>
-                <div style={{
-                  width: '3rem',
-                  height: '3rem',
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                  borderRadius: '0.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  <Phone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="mb-10 grid grid-cols-2 gap-4">
+              <div className="rounded-xl border border-black/[0.04] bg-white p-5 shadow-sm">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-600">
+                  <Phone className="h-5 w-5 text-white" />
                 </div>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#111827',
-                  marginBottom: '0.5rem'
-                }}>
+                <h3 className="mb-1 text-base font-semibold text-[#1c1c1e]">
                   Voice AI Calls
                 </h3>
-                <p style={{ 
-                  fontSize: '0.875rem', 
-                  color: '#6b7280',
-                  lineHeight: '1.5'
-                }}>
+                <p className="text-sm leading-relaxed text-[#6b7280]">
                   Natural conversations with patients for medication management
                 </p>
               </div>
 
-              <div style={{
-                backgroundColor: 'white',
-                padding: '1.5rem',
-                borderRadius: '1rem',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb'
-              }}>
-                <div style={{
-                  width: '3rem',
-                  height: '3rem',
-                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                  borderRadius: '0.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  <Shield style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+              <div className="rounded-xl border border-black/[0.04] bg-white p-5 shadow-sm">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-600">
+                  <Shield className="h-5 w-5 text-white" />
                 </div>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#111827',
-                  marginBottom: '0.5rem'
-                }}>
+                <h3 className="mb-1 text-base font-semibold text-[#1c1c1e]">
                   HIPAA Compliant
                 </h3>
-                <p style={{ 
-                  fontSize: '0.875rem', 
-                  color: '#6b7280',
-                  lineHeight: '1.5'
-                }}>
+                <p className="text-sm leading-relaxed text-[#6b7280]">
                   Enterprise-grade security for patient data protection
                 </p>
               </div>
 
-              <div style={{
-                backgroundColor: 'white',
-                padding: '1.5rem',
-                borderRadius: '1rem',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb'
-              }}>
-                <div style={{
-                  width: '3rem',
-                  height: '3rem',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                  borderRadius: '0.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  <Users style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+              <div className="rounded-xl border border-black/[0.04] bg-white p-5 shadow-sm">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-600">
+                  <Users className="h-5 w-5 text-white" />
                 </div>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#111827',
-                  marginBottom: '0.5rem'
-                }}>
+                <h3 className="mb-1 text-base font-semibold text-[#1c1c1e]">
                   Multi-Tenant
                 </h3>
-                <p style={{ 
-                  fontSize: '0.875rem', 
-                  color: '#6b7280',
-                  lineHeight: '1.5'
-                }}>
+                <p className="text-sm leading-relaxed text-[#6b7280]">
                   Support for multiple pharmacy locations and teams
                 </p>
               </div>
 
-              <div style={{
-                backgroundColor: 'white',
-                padding: '1.5rem',
-                borderRadius: '1rem',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-                border: '1px solid #e5e7eb'
-              }}>
-                <div style={{
-                  width: '3rem',
-                  height: '3rem',
-                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                  borderRadius: '0.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  <CheckCircle style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+              <div className="rounded-xl border border-black/[0.04] bg-white p-5 shadow-sm">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-600">
+                  <CheckCircle className="h-5 w-5 text-white" />
                 </div>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#111827',
-                  marginBottom: '0.5rem'
-                }}>
+                <h3 className="mb-1 text-base font-semibold text-[#1c1c1e]">
                   24/7 Available
                 </h3>
-                <p style={{ 
-                  fontSize: '0.875rem', 
-                  color: '#6b7280',
-                  lineHeight: '1.5'
-                }}>
+                <p className="text-sm leading-relaxed text-[#6b7280]">
                   Round-the-clock patient support and medication management
                 </p>
               </div>
             </div>
 
             {/* Stats */}
-            <div style={{
-              backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: '1rem',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              border: '1px solid #e5e7eb'
-            }}>
-              <h3 style={{ 
-                fontSize: '1.25rem', 
-                fontWeight: '600', 
-                color: '#111827',
-                marginBottom: '1.5rem',
-                textAlign: 'center'
-              }}>
+            <div className="rounded-xl border border-black/[0.04] bg-white p-8 shadow-sm">
+              <h3 className="mb-6 text-center text-lg font-semibold text-[#1c1c1e]">
                 Trusted by Pharmacies Nationwide
               </h3>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(3, 1fr)', 
-                gap: '1rem',
-                textAlign: 'center'
-              }}>
+              <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div style={{ 
-                    fontSize: '2rem', 
-                    fontWeight: 'bold', 
-                    color: '#3b82f6',
-                    marginBottom: '0.25rem'
-                  }}>
+                  <div className="mb-1 text-3xl font-bold tracking-tight text-teal-600">
                     500+
                   </div>
-                  <div style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280'
-                  }}>
-                    Active Pharmacies
-                  </div>
+                  <div className="text-sm text-[#6b7280]">Active Pharmacies</div>
                 </div>
                 <div>
-                  <div style={{ 
-                    fontSize: '2rem', 
-                    fontWeight: 'bold', 
-                    color: '#10b981',
-                    marginBottom: '0.25rem'
-                  }}>
+                  <div className="mb-1 text-3xl font-bold tracking-tight text-teal-600">
                     99.9%
                   </div>
-                  <div style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280'
-                  }}>
-                    Uptime
-                  </div>
+                  <div className="text-sm text-[#6b7280]">Uptime</div>
                 </div>
                 <div>
-                  <div style={{ 
-                    fontSize: '2rem', 
-                    fontWeight: 'bold', 
-                    color: '#8b5cf6',
-                    marginBottom: '0.25rem'
-                  }}>
+                  <div className="mb-1 text-3xl font-bold tracking-tight text-teal-600">
                     1M+
                   </div>
-                  <div style={{ 
-                    fontSize: '0.875rem', 
-                    color: '#6b7280'
-                  }}>
-                    Calls Handled
-                  </div>
+                  <div className="text-sm text-[#6b7280]">Calls Handled</div>
                 </div>
               </div>
             </div>
