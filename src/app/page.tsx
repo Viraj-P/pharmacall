@@ -1,433 +1,373 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle, Shield, Clock, DollarSign, Phone, MessageSquare, FileText, CreditCard, LifeBuoy } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle,
+  Shield,
+  Clock,
+  Phone,
+  MessageSquare,
+  FileText,
+  CreditCard,
+  LifeBuoy,
+  Menu,
+} from "lucide-react";
 
 export default function HomePage() {
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="min-h-screen bg-[#fafaf8] font-sans">
       {/* Header */}
-      <header style={{ borderBottom: '1px solid #e2e8f0', backgroundColor: 'white', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{
-              width: '3rem',
-              height: '3rem',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-              borderRadius: '0.75rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-              position: 'relative'
-            }}>
-              <div style={{
-                width: '1.5rem',
-                height: '1.5rem',
-                background: 'white',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative'
-              }}>
-                <div style={{
-                  width: '0.75rem',
-                  height: '0.75rem',
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                  borderRadius: '50%',
-                  position: 'relative'
-                }}>
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '0.25rem',
-                    height: '0.25rem',
-                    background: 'white',
-                    borderRadius: '50%'
-                  }}></div>
-                </div>
-              </div>
+      <header className="sticky top-0 z-50 border-b border-[#0c1220]/10 bg-[#0c1220]/95 backdrop-blur-md">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-600">
+              <Phone className="h-5 w-5 text-white" />
             </div>
-            <span style={{
-              fontSize: '1.875rem',
-              fontWeight: 'bold',
-              background: 'linear-gradient(90deg, #3b82f6 0%, #6366f1 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              PharmaCall
+            <span className="text-2xl font-semibold tracking-tight text-[#f0ece6]">
+              PharmCall
             </span>
           </div>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-            <a href="#features" style={{ color: '#4b5563', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }}>Features</a>
-            <a href="#testimonials" style={{ color: '#4b5563', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }}>Testimonials</a>
-            <a href="#faq" style={{ color: '#4b5563', textDecoration: 'none', fontWeight: '500', transition: 'color 0.2s' }}>FAQ</a>
-            <Link href="/auth/login" style={{
-              padding: '0.5rem 1rem',
-              border: '1px solid #3b82f6',
-              borderRadius: '0.375rem',
-              color: '#3b82f6',
-              backgroundColor: 'white',
-              textDecoration: 'none',
-              fontWeight: '500',
-              transition: 'background-color 0.2s, color 0.2s'
-            }}>
+
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-8 md:flex">
+            <a
+              href="#features"
+              className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+            >
+              Features
+            </a>
+            <a
+              href="#testimonials"
+              className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+            >
+              Testimonials
+            </a>
+            <a
+              href="#faq"
+              className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+            >
+              FAQ
+            </a>
+            <Link
+              href="/auth/login"
+              className="rounded-md border border-[#f0ece6]/20 px-4 py-2 text-sm font-medium text-[#f0ece6]/80 transition-all hover:border-[#f0ece6]/40 hover:text-[#f0ece6]"
+            >
               Login
             </Link>
-            <Link href="/auth/login" style={{
-              padding: '0.5rem 1rem',
-              borderRadius: '0.375rem',
-              background: 'linear-gradient(90deg, #3b82f6 0%, #6366f1 100%)',
-              color: 'white',
-              textDecoration: 'none',
-              fontWeight: '500',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-              transition: 'opacity 0.2s'
-            }}>
+            <Link
+              href="/auth/login"
+              className="rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-teal-600/20 transition-all hover:bg-teal-500"
+            >
               Get Started
             </Link>
           </nav>
+
+          {/* Mobile menu button */}
+          <button className="flex h-10 w-10 items-center justify-center rounded-md text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6] md:hidden">
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section style={{
-        minHeight: 'calc(100vh - 4rem)', // Adjust for header height
-        background: 'linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem 1.5rem'
-      }}>
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '4rem',
-          alignItems: 'center'
-        }}>
-          {/* Left Content */}
-          <div style={{ textAlign: 'left', padding: '2rem' }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '0.25rem 0.75rem',
-              borderRadius: '9999px',
-              backgroundColor: '#e0f2fe',
-              color: '#2563eb',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              marginBottom: '1.5rem'
-            }}>
-              <CheckCircle style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
-              Trusted by thousands of pharmacies just like yours
-            </div>
-            <h1 style={{
-              fontSize: '3.75rem',
-              fontWeight: 'bold',
-              color: '#111827',
-              marginBottom: '1.5rem',
-              lineHeight: '1.2'
-            }}>
-              Medication management, <span style={{ color: '#3b82f6' }}>covered by insurance</span>
-            </h1>
-            <p style={{
-              fontSize: '1.25rem',
-              color: '#4b5563',
-              marginBottom: '2.5rem',
-              lineHeight: '1.6'
-            }}>
-              Expert psychiatric care to help you feel better, faster – right from home.
-            </p>
-            <Link href="/auth/login" style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '1rem 2rem',
-              borderRadius: '0.5rem',
-              background: 'linear-gradient(90deg, #3b82f6 0%, #6366f1 100%)',
-              color: 'white',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '1.125rem',
-              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-              transition: 'opacity 0.2s'
-            }}>
-              Book now
-              <ArrowRight style={{ width: '1.25rem', height: '1.25rem', marginLeft: '0.75rem' }} />
-            </Link>
-          </div>
+      <section className="relative overflow-hidden bg-[#0c1220]">
+        {/* Animated gradient mesh background */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="animate-mesh-shift absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full bg-teal-600/10 blur-[120px]" />
+          <div
+            className="animate-mesh-shift absolute -right-32 top-1/3 h-[400px] w-[400px] rounded-full bg-teal-800/8 blur-[100px]"
+            style={{ animationDelay: "-5s" }}
+          />
+          <div
+            className="animate-mesh-shift absolute bottom-0 left-1/3 h-[350px] w-[350px] rounded-full bg-slate-600/10 blur-[100px]"
+            style={{ animationDelay: "-10s" }}
+          />
+          {/* Grain texture overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            }}
+          />
+        </div>
 
-          {/* Right Image Placeholder */}
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            height: '400px',
-            background: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 100%)',
-            borderRadius: '1rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: '1rem',
-              left: '1rem',
-              width: '3rem',
-              height: '3rem',
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              borderRadius: '0.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <Phone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+        <div className="relative mx-auto max-w-[1400px] px-6 pb-28 pt-24 md:pb-36 md:pt-32">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-teal-500/20 bg-teal-500/10 px-4 py-1.5">
+              <CheckCircle className="h-4 w-4 text-teal-400" />
+              <span className="text-sm font-medium text-teal-300">
+                HIPAA-compliant voice automation
+              </span>
             </div>
-            <div style={{
-              position: 'absolute',
-              bottom: '1rem',
-              right: '1rem',
-              width: '3rem',
-              height: '3rem',
-              backgroundColor: 'rgba(255,255,255,0.2)',
-              borderRadius: '0.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <MessageSquare style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
-            </div>
-            <div style={{
-              width: '200px',
-              height: '200px',
-              backgroundColor: 'rgba(255,255,255,0.3)',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative'
-            }}>
-              <div style={{
-                width: '100px',
-                height: '100px',
-                backgroundColor: 'white',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <LifeBuoy style={{ width: '3rem', height: '3rem', color: '#6366f1' }} />
-              </div>
+
+            <h1 className="mb-6 font-serif text-5xl leading-[1.1] tracking-tight text-[#f0ece6] md:text-6xl lg:text-7xl">
+              The voice your pharmacy
+              <br />
+              <span className="text-teal-400">never has to staff</span>
+            </h1>
+
+            <p className="mx-auto mb-10 max-w-xl text-lg leading-relaxed text-[#f0ece6]/60 md:text-xl">
+              AI-powered phone agents that handle refill calls, delivery
+              scheduling, and patient outreach around the clock -- so your
+              pharmacists can focus on clinical care.
+            </p>
+
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <Link
+                href="/auth/login"
+                className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-8 py-3.5 text-base font-semibold text-white shadow-xl shadow-teal-600/25 transition-all hover:bg-teal-500 hover:shadow-teal-500/30"
+              >
+                Request a demo
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <a
+                href="#features"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#f0ece6]/15 px-8 py-3.5 text-base font-medium text-[#f0ece6]/70 transition-all hover:border-[#f0ece6]/30 hover:text-[#f0ece6]"
+              >
+                See how it works
+              </a>
             </div>
           </div>
         </div>
+
+        {/* Bottom fade into next section */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#fafaf8] to-transparent" />
       </section>
 
       {/* Stats Section */}
-      <section style={{ backgroundColor: 'white', padding: '4rem 1.5rem', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', textAlign: 'center' }}>
-          <div>
-            <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3b82f6', marginBottom: '0.5rem' }}>120M+</div>
-            <div style={{ fontSize: '1.125rem', color: '#4b5563' }}>individuals are covered by insurance</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3b82f6', marginBottom: '0.5rem' }}>99.9%</div>
-            <div style={{ fontSize: '1.125rem', color: '#4b5563' }}>HIPAA compliance rate</div>
-          </div>
-          <div>
-            <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#3b82f6', marginBottom: '0.5rem' }}>24/7</div>
-            <div style={{ fontSize: '1.125rem', color: '#4b5563' }}>voice agent availability</div>
+      <section className="relative z-10 -mt-12 px-6">
+        <div className="mx-auto max-w-4xl rounded-2xl border border-black/[0.04] bg-white px-6 py-10 shadow-xl shadow-black/[0.03] md:px-12">
+          <div className="grid grid-cols-1 divide-y md:grid-cols-3 md:divide-x md:divide-y-0 divide-gray-100">
+            <div className="flex flex-col items-center py-6 md:py-0">
+              <div className="text-4xl font-bold tracking-tight text-teal-600 md:text-5xl">
+                500+
+              </div>
+              <div className="mt-2 text-sm font-medium text-[#6b7280]">
+                Specialty pharmacies served
+              </div>
+            </div>
+            <div className="flex flex-col items-center py-6 md:py-0">
+              <div className="text-4xl font-bold tracking-tight text-teal-600 md:text-5xl">
+                99.9%
+              </div>
+              <div className="mt-2 text-sm font-medium text-[#6b7280]">
+                Platform uptime
+              </div>
+            </div>
+            <div className="flex flex-col items-center py-6 md:py-0">
+              <div className="text-4xl font-bold tracking-tight text-teal-600 md:text-5xl">
+                24/7
+              </div>
+              <div className="mt-2 text-sm font-medium text-[#6b7280]">
+                AI availability
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Conditions We Support Section */}
-      <section id="features" style={{ backgroundColor: '#f8fafc', padding: '6rem 1.5rem', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '0.25rem 0.75rem',
-            borderRadius: '9999px',
-            backgroundColor: '#e0f2fe',
-            color: '#2563eb',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            marginBottom: '1rem'
-          }}>
-            <CheckCircle style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} />
-            Comprehensive Care
+      {/* Features Section */}
+      <section
+        id="features"
+        className="bg-[#fafaf8] px-6 pb-24 pt-24"
+      >
+        <div className="mx-auto max-w-[1400px]">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-teal-600/15 bg-teal-50 px-4 py-1.5">
+              <CheckCircle className="h-4 w-4 text-teal-600" />
+              <span className="text-sm font-medium text-teal-700">
+                Platform Capabilities
+              </span>
+            </div>
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e] md:text-5xl">
+              What we automate
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              Purpose-built voice AI for the workflows that consume your
+              pharmacy staff's time. Every call handled with clinical
+              precision.
+            </p>
           </div>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>
-            Compassionate care tailored to <span style={{ fontStyle: 'italic', color: '#3b82f6' }}>you.</span>
-          </h2>
-          <p style={{ fontSize: '1.125rem', color: '#4b5563', maxWidth: '800px', margin: '0 auto 3rem auto' }}>
-            Our AI providers are equipped to help with most pharmacy-related conditions through telehealth. Common ones include:
-          </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {/* Feature Card 1 */}
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', textAlign: 'left' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1rem'
-              }}>
-                <Phone style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="group rounded-xl border border-black/[0.04] bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600">
+                <Phone className="h-5 w-5 text-white" />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Delivery Scheduling</h3>
-              <p style={{ color: '#4b5563', fontSize: '0.9375rem' }}>Automated reminders and confirmations for medication deliveries, reducing missed appointments.</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#1c1c1e]">
+                Delivery Scheduling
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                Automated reminders and confirmations for medication
+                deliveries, reducing missed appointments and improving
+                patient adherence.
+              </p>
             </div>
 
             {/* Feature Card 2 */}
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', textAlign: 'left' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1rem'
-              }}>
-                <FileText style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="group rounded-xl border border-black/[0.04] bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600">
+                <FileText className="h-5 w-5 text-white" />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Medication Changes</h3>
-              <p style={{ color: '#4b5563', fontSize: '0.9375rem' }}>AI agents assist with dosage adjustments, prescription modifications, and patient education.</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#1c1c1e]">
+                Medication Changes
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                AI agents assist with dosage adjustments, prescription
+                modifications, and proactive patient education calls.
+              </p>
             </div>
 
             {/* Feature Card 3 */}
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', textAlign: 'left' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1rem'
-              }}>
-                <Shield style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="group rounded-xl border border-black/[0.04] bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600">
+                <Shield className="h-5 w-5 text-white" />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Side Effect Management</h3>
-              <p style={{ color: '#4b5563', fontSize: '0.9375rem' }}>Provide guidance on managing medication side effects and when to contact a pharmacist.</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#1c1c1e]">
+                Side Effect Management
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                Proactive outreach to assess tolerance, with intelligent
+                escalation to a pharmacist for clinical intervention.
+              </p>
             </div>
 
             {/* Feature Card 4 */}
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', textAlign: 'left' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1rem'
-              }}>
-                <Clock style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="group rounded-xl border border-black/[0.04] bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600">
+                <Clock className="h-5 w-5 text-white" />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Refill Reminders</h3>
-              <p style={{ color: '#4b5563', fontSize: '0.9375rem' }}>Automated calls and messages for prescription renewals, improving adherence.</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#1c1c1e]">
+                Refill Reminders
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                Automated calls and messages for prescription renewals,
+                improving adherence rates and reducing lapsed therapies.
+              </p>
             </div>
 
             {/* Feature Card 5 */}
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', textAlign: 'left' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1rem'
-              }}>
-                <CreditCard style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="group rounded-xl border border-black/[0.04] bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600">
+                <CreditCard className="h-5 w-5 text-white" />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Insurance & Coverage</h3>
-              <p style={{ color: '#4b5563', fontSize: '0.9375rem' }}>Assistance with prior authorizations, copay questions, and coverage verification.</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#1c1c1e]">
+                Insurance & Coverage
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                Streamlined prior authorizations, copay inquiries, and
+                real-time coverage verification without staff involvement.
+              </p>
             </div>
 
             {/* Feature Card 6 */}
-            <div style={{ backgroundColor: 'white', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', textAlign: 'left' }}>
-              <div style={{
-                width: '3rem',
-                height: '3rem',
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '1rem'
-              }}>
-                <LifeBuoy style={{ width: '1.5rem', height: '1.5rem', color: 'white' }} />
+            <div className="group rounded-xl border border-black/[0.04] bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-teal-600">
+                <LifeBuoy className="h-5 w-5 text-white" />
               </div>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#111827', marginBottom: '0.5rem' }}>Emergency Support</h3>
-              <p style={{ color: '#4b5563', fontSize: '0.9375rem' }}>AI can triage urgent medication needs and escalate to a pharmacist for critical situations.</p>
+              <h3 className="mb-2 text-lg font-semibold text-[#1c1c1e]">
+                Emergency Triage
+              </h3>
+              <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                Intelligent triage for urgent medication needs with
+                immediate escalation to on-call pharmacists when required.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" style={{ backgroundColor: 'white', padding: '6rem 1.5rem', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: '#111827', marginBottom: '1rem' }}>
-            Real stories of hope and healing from our patients.
-          </h2>
-          <p style={{ fontSize: '1.125rem', color: '#4b5563', maxWidth: '800px', margin: '0 auto 3rem auto' }}>
-            We're honored to support thousands on their journeys. Here's what some have shared:
-          </p>
+      <section
+        id="testimonials"
+        className="border-t border-black/[0.04] bg-white px-6 py-24"
+      >
+        <div className="mx-auto max-w-[1400px]">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e] md:text-5xl">
+              Trusted by pharmacy leaders
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              Hear from the directors and executives who chose PharmCall to
+              transform their pharmacy operations.
+            </p>
+          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Testimonial Card 1 */}
-            <div style={{ backgroundColor: '#f8fafc', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)', textAlign: 'left' }}>
-              <p style={{ fontStyle: 'italic', color: '#4b5563', marginBottom: '1.5rem' }}>
-                "PharmaCall has been a godsend and changed my pharmacy operations for the better. They really listened to our needs and are consistently trying to understand more what's going on and tries to help us through it."
+            <div className="relative rounded-xl border border-black/[0.04] bg-[#fafaf8] p-8">
+              <div className="mb-4 font-serif text-5xl leading-none text-teal-600/20">
+                &ldquo;
+              </div>
+              <p className="mb-6 text-[15px] leading-relaxed text-[#4b5563]">
+                PharmCall cut our inbound call volume by 60% in the first
+                quarter. Our pharmacists finally have time for clinical
+                consultations instead of fielding refill requests all day.
+                The ROI was immediate.
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb', fontWeight: 'bold' }}>MG</div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-600/10 text-sm font-semibold text-teal-700">
+                  SK
+                </div>
                 <div>
-                  <div style={{ fontWeight: '600', color: '#111827' }}>Maria G. (42)</div>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Austin, TX</div>
+                  <div className="text-sm font-semibold text-[#1c1c1e]">
+                    Sarah Kim, PharmD
+                  </div>
+                  <div className="text-sm text-[#6b7280]">
+                    Director of Pharmacy, Memorial Health
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Testimonial Card 2 */}
-            <div style={{ backgroundColor: '#f8fafc', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)', textAlign: 'left' }}>
-              <p style={{ fontStyle: 'italic', color: '#4b5563', marginBottom: '1.5rem' }}>
-                "I am so THANKFUL to God that I was referred to PharmaCall! Nina has been a GOD send angel for me. I have struggled the last 6 yrs with medication. She was the only one that was open to revisit the diagnosis. We didn't start from the ground up but I am finally feeling like a functioning human."
+            <div className="relative rounded-xl border border-black/[0.04] bg-[#fafaf8] p-8">
+              <div className="mb-4 font-serif text-5xl leading-none text-teal-600/20">
+                &ldquo;
+              </div>
+              <p className="mb-6 text-[15px] leading-relaxed text-[#4b5563]">
+                We were skeptical about AI handling sensitive patient
+                interactions, but the HIPAA compliance and natural
+                conversation quality won us over. Patients don't even
+                realize they're speaking with an AI agent.
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb', fontWeight: 'bold' }}>AR</div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-600/10 text-sm font-semibold text-teal-700">
+                  RM
+                </div>
                 <div>
-                  <div style={{ fontWeight: '600', color: '#111827' }}>Anthony R. (36)</div>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Houston, TX</div>
+                  <div className="text-sm font-semibold text-[#1c1c1e]">
+                    Robert Martinez
+                  </div>
+                  <div className="text-sm text-[#6b7280]">
+                    VP of Operations, CureWell Specialty Rx
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Testimonial Card 3 */}
-            <div style={{ backgroundColor: '#f8fafc', borderRadius: '0.75rem', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)', textAlign: 'left' }}>
-              <p style={{ fontStyle: 'italic', color: '#4b5563', marginBottom: '1.5rem' }}>
-                "This service helped me more than I could ever let you know!"
+            <div className="relative rounded-xl border border-black/[0.04] bg-[#fafaf8] p-8">
+              <div className="mb-4 font-serif text-5xl leading-none text-teal-600/20">
+                &ldquo;
+              </div>
+              <p className="mb-6 text-[15px] leading-relaxed text-[#4b5563]">
+                We onboarded in under two weeks. PharmCall integrated
+                directly with our existing dispensing system and the
+                after-hours coverage alone saved us two full-time
+                headcount. Truly enterprise-grade.
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <div style={{ width: '3rem', height: '3rem', borderRadius: '50%', backgroundColor: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb', fontWeight: 'bold' }}>JK</div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-600/10 text-sm font-semibold text-teal-700">
+                  LP
+                </div>
                 <div>
-                  <div style={{ fontWeight: '600', color: '#111827' }}>Jasmine K. (29)</div>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>Austin, TX</div>
+                  <div className="text-sm font-semibold text-[#1c1c1e]">
+                    Linda Pham, RPh
+                  </div>
+                  <div className="text-sm text-[#6b7280]">
+                    Chief Pharmacy Officer, Ascend Health
+                  </div>
                 </div>
               </div>
             </div>
@@ -436,128 +376,190 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section style={{ background: 'linear-gradient(90deg, #3b82f6 0%, #6366f1 100%)', padding: '6rem 1.5rem', textAlign: 'center', color: 'white' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Ready for Your Next Step?</h2>
-          <p style={{ fontSize: '1.125rem', opacity: 0.9, marginBottom: '2.5rem' }}>
-            We're here to support you, whenever you're ready.
+      <section className="relative overflow-hidden bg-[#0c1220] px-6 py-24">
+        {/* Subtle mesh for depth */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="animate-mesh-shift absolute -right-20 top-0 h-[300px] w-[300px] rounded-full bg-teal-600/10 blur-[100px]" />
+          <div
+            className="animate-mesh-shift absolute -left-20 bottom-0 h-[250px] w-[250px] rounded-full bg-slate-500/10 blur-[80px]"
+            style={{ animationDelay: "-7s" }}
+          />
+        </div>
+
+        <div className="relative mx-auto max-w-3xl text-center">
+          <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#f0ece6] md:text-5xl">
+            Ready to automate your pharmacy calls?
+          </h2>
+          <p className="mx-auto mb-10 max-w-lg text-lg text-[#f0ece6]/60">
+            Join 500+ specialty pharmacies that trust PharmCall to handle
+            patient communications with precision and care.
           </p>
-          <Link href="/auth/login" style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '1rem 2rem',
-            borderRadius: '0.5rem',
-            backgroundColor: 'white',
-            color: '#3b82f6',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '1.125rem',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-            transition: 'opacity 0.2s'
-          }}>
-            Book now
-            <ArrowRight style={{ width: '1.25rem', height: '1.25rem', marginLeft: '0.75rem' }} />
-          </Link>
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-8 py-3.5 text-base font-semibold text-white shadow-xl shadow-teal-600/25 transition-all hover:bg-teal-500 hover:shadow-teal-500/30"
+            >
+              Request a demo
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#f0ece6]/15 px-8 py-3.5 text-base font-medium text-[#f0ece6]/70 transition-all hover:border-[#f0ece6]/30 hover:text-[#f0ece6]"
+            >
+              Contact sales
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer style={{ backgroundColor: '#1f2937', color: 'white', padding: '4rem 1.5rem' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '2rem',
-            marginBottom: '2rem'
-          }}>
-            <div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                marginBottom: '1rem'
-              }}>
-                <div style={{
-                  width: '2rem',
-                  height: '2rem',
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                  borderRadius: '0.5rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative'
-                }}>
-                  <div style={{
-                    width: '1rem',
-                    height: '1rem',
-                    background: 'white',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'relative'
-                  }}>
-                    <div style={{
-                      width: '0.5rem',
-                      height: '0.5rem',
-                      background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
-                      borderRadius: '50%',
-                      position: 'relative'
-                    }}>
-                      <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: '0.125rem',
-                        height: '0.125rem',
-                        background: 'white',
-                        borderRadius: '50%'
-                      }}></div>
-                    </div>
-                  </div>
+      <footer className="bg-[#0a0f1a] px-6 pb-8 pt-16">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="mb-12 grid grid-cols-2 gap-8 md:grid-cols-4">
+            {/* Brand column */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-600">
+                  <Phone className="h-4 w-4 text-white" />
                 </div>
-                <span style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>PharmaCall</span>
+                <span className="text-xl font-semibold text-[#f0ece6]">
+                  PharmCall
+                </span>
               </div>
-              <p style={{ color: '#9ca3af' }}>
-                AI-powered voice automation for specialty pharmacies.
+              <p className="max-w-xs text-sm leading-relaxed text-[#f0ece6]/40">
+                AI-powered voice automation built exclusively for specialty
+                pharmacies.
               </p>
             </div>
+
+            {/* Product column */}
             <div>
-              <h3 style={{ fontWeight: '600', marginBottom: '1rem' }}>Product</h3>
-              <ul style={{ listStyle: 'none', padding: 0, color: '#9ca3af' }}>
-                <li style={{ marginBottom: '0.5rem' }}>Features</li>
-                <li style={{ marginBottom: '0.5rem' }}>Dashboard</li>
-                <li style={{ marginBottom: '0.5rem' }}>Security</li>
-                <li style={{ marginBottom: '0.5rem' }}>Pricing</li>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#f0ece6]/60">
+                Product
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#features"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Security
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Pricing
+                  </a>
+                </li>
               </ul>
             </div>
+
+            {/* Support column */}
             <div>
-              <h3 style={{ fontWeight: '600', marginBottom: '1rem' }}>Support</h3>
-              <ul style={{ listStyle: 'none', padding: 0, color: '#9ca3af' }}>
-                <li style={{ marginBottom: '0.5rem' }}>Documentation</li>
-                <li style={{ marginBottom: '0.5rem' }}>Help Center</li>
-                <li style={{ marginBottom: '0.5rem' }}>Contact Us</li>
-                <li style={{ marginBottom: '0.5rem' }}>Status</li>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#f0ece6]/60">
+                Support
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Documentation
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Contact Us
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Status
+                  </a>
+                </li>
               </ul>
             </div>
+
+            {/* Legal column */}
             <div>
-              <h3 style={{ fontWeight: '600', marginBottom: '1rem' }}>Legal</h3>
-              <ul style={{ listStyle: 'none', padding: 0, color: '#9ca3af' }}>
-                <li style={{ marginBottom: '0.5rem' }}>Privacy Policy</li>
-                <li style={{ marginBottom: '0.5rem' }}>Terms of Service</li>
-                <li style={{ marginBottom: '0.5rem' }}>HIPAA Compliance</li>
-                <li style={{ marginBottom: '0.5rem' }}>Security</li>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#f0ece6]/60">
+                Legal
+              </h3>
+              <ul className="space-y-3">
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    HIPAA Compliance
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
+                  >
+                    BAA
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
-          <div style={{
-            borderTop: '1px solid #374151',
-            paddingTop: '2rem',
-            textAlign: 'center',
-            color: '#9ca3af'
-          }}>
-            <p>&copy; 2024 PharmaCall. All rights reserved.</p>
+
+          <div className="border-t border-[#f0ece6]/10 pt-8 text-center">
+            <p className="text-sm text-[#f0ece6]/30">
+              &copy; 2025 PharmCall. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

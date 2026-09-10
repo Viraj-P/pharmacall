@@ -16,6 +16,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["var(--font-instrument-serif)", "Georgia", "serif"],
+        sans: ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -65,10 +69,17 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "mesh-shift": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "25%": { transform: "translate(30px, -50px) scale(1.1)" },
+          "50%": { transform: "translate(-20px, 20px) scale(0.95)" },
+          "75%": { transform: "translate(50px, 30px) scale(1.05)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "mesh-shift": "mesh-shift 20s ease-in-out infinite",
       },
     },
   },
