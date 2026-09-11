@@ -1,9 +1,11 @@
-import { requireAuth } from '@/lib/auth'
+import { getCurrentUser } from '@/lib/auth'
 import { QuickActions } from '@/components/dashboard/quick-actions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default async function NewCallPage() {
-  const user = await requireAuth()
+  // Allow demo access — don't require auth
+  let user = null
+  try { user = await getCurrentUser() } catch {}
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
