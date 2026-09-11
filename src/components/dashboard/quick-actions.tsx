@@ -129,6 +129,18 @@ export function QuickActions() {
                   <span>Shipment Feedback</span>
                 </div>
               </SelectItem>
+              <SelectItem value="refill_reminder">
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-4 w-4" />
+                  <span>Refill Reminder</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="side_effect_check">
+                <div className="flex items-center space-x-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>Side Effect Check-in</span>
+                </div>
+              </SelectItem>
               <SelectItem value="general_inquiry">
                 <div className="flex items-center space-x-2">
                   <Phone className="h-4 w-4" />
@@ -137,6 +149,18 @@ export function QuickActions() {
               </SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="notes">Patient Context <span className="text-gray-400 font-normal">(optional)</span></Label>
+          <textarea
+            id="notes"
+            placeholder="e.g. Patient recently changed from Metoprolol 25mg to 50mg. Check for side effects."
+            rows={3}
+            disabled={loading}
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+          />
+          <p className="text-xs text-gray-400">Context shared with the AI agent before the call</p>
         </div>
 
         {validationError && (
