@@ -164,10 +164,10 @@ export default function HomePage() {
 
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
-                href="/auth/login"
+                href="/dashboard"
                 className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-8 py-3.5 text-base font-semibold text-white shadow-xl shadow-teal-600/25 transition-all hover:bg-teal-500 hover:shadow-teal-500/30"
               >
-                Request a demo
+                Try Demo Dashboard
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <a
@@ -552,17 +552,17 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/auth/login"
+              href="/dashboard"
               className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-8 py-3.5 text-base font-semibold text-white shadow-xl shadow-teal-600/25 transition-all hover:bg-teal-500 hover:shadow-teal-500/30"
             >
-              Request a demo
+              Try Demo Dashboard
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
               href="/auth/login"
               className="inline-flex items-center gap-2 rounded-lg border border-[#f0ece6]/15 px-8 py-3.5 text-base font-medium text-[#f0ece6]/70 transition-all hover:border-[#f0ece6]/30 hover:text-[#f0ece6]"
             >
-              Contact sales
+              Sign In
             </Link>
           </div>
         </div>
