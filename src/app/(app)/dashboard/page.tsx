@@ -6,6 +6,7 @@ import { CallAnalytics } from '@/components/dashboard/call-analytics'
 import { AiInsights } from '@/components/dashboard/ai-insights'
 import { TodaysSchedule } from '@/components/dashboard/todays-schedule'
 import { LiveActivity } from '@/components/dashboard/live-activity'
+import { DashboardTimestamp } from '@/components/dashboard/dashboard-timestamp'
 
 export default async function DashboardPage() {
   let user = null
@@ -39,6 +40,8 @@ export default async function DashboardPage() {
         <TodaysSchedule />
         <QuickActions />
       </div>
+
+      <DashboardTimestamp />
     </div>
   )
 }
