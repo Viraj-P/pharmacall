@@ -264,6 +264,85 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* See It In Action - Transcript Demo */}
+      <section className="bg-[#fafaf8] px-6 py-24">
+        <div className="mx-auto max-w-4xl">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e]">
+              See it in action
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              A real conversation between PharmCall&apos;s AI agent and a patient, handling a refill reminder from start to finish.
+            </p>
+          </div>
+
+          <div className="mx-auto max-w-2xl rounded-2xl border border-black/[0.04] bg-white shadow-xl shadow-black/[0.03] overflow-hidden">
+            {/* Transcript header */}
+            <div className="flex items-center gap-3 border-b border-gray-100 bg-gray-50/80 px-6 py-4">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-600">
+                <Phone className="h-4 w-4 text-white" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-[#1c1c1e]">Refill Reminder Call</div>
+                <div className="text-xs text-[#6b7280]">Duration: 1m 42s &middot; Completed successfully</div>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span className="text-xs font-medium text-emerald-600">Resolved</span>
+              </div>
+            </div>
+
+            {/* Transcript body */}
+            <div className="space-y-4 px-6 py-6">
+              {[
+                { speaker: "ai", text: "Hi, this is a call from Valley Specialty Pharmacy. May I speak with Margaret?" },
+                { speaker: "patient", text: "Yes, this is Margaret." },
+                { speaker: "ai", text: "Great, Margaret. I'm calling about your Atorvastatin 40mg prescription. Our records show it's due for a refill in two days. Would you like us to prepare that for you?" },
+                { speaker: "patient", text: "Oh, yes please. Actually, I've been meaning to call about that. Can you also check on my blood pressure medication?" },
+                { speaker: "ai", text: "Of course. I see your Lisinopril 10mg was last filled on August 28th and has 8 days remaining. Would you like me to schedule both refills together for pickup?" },
+                { speaker: "patient", text: "That would be perfect. Can I pick them up Thursday afternoon?" },
+                { speaker: "ai", text: "Both prescriptions will be ready for pickup Thursday after 2 PM. You'll receive a text confirmation when they're prepared. Is there anything else I can help with?" },
+                { speaker: "patient", text: "No, that's everything. Thank you!" },
+                { speaker: "ai", text: "You're welcome, Margaret. Have a great day." },
+              ].map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex gap-3 ${msg.speaker === "patient" ? "flex-row-reverse" : ""}`}
+                >
+                  <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+                    msg.speaker === "ai"
+                      ? "bg-teal-600 text-white"
+                      : "bg-gray-100 text-gray-600"
+                  }`}>
+                    {msg.speaker === "ai" ? "AI" : "MP"}
+                  </div>
+                  <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                    msg.speaker === "ai"
+                      ? "rounded-tl-md bg-teal-50 text-teal-900"
+                      : "rounded-tr-md bg-gray-50 text-gray-800"
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Transcript footer - AI summary */}
+            <div className="border-t border-gray-100 bg-gray-50/50 px-6 py-4">
+              <div className="text-xs font-semibold uppercase tracking-wider text-[#6b7280] mb-2">AI Summary</div>
+              <p className="text-sm text-[#4b5563] leading-relaxed">
+                Patient confirmed refill for Atorvastatin 40mg and requested Lisinopril 10mg refill. Both prescriptions scheduled for Thursday pickup after 2 PM. Text confirmation to be sent upon preparation. No clinical concerns raised.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-full bg-teal-100 px-2.5 py-0.5 text-xs font-medium text-teal-700">2 refills scheduled</span>
+                <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700">Thursday pickup</span>
+                <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700">No escalation needed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section
         id="features"
