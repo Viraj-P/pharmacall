@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import {
   ArrowRight,
   CheckCircle,
@@ -10,9 +13,11 @@ import {
   CreditCard,
   LifeBuoy,
   Menu,
+  X,
 } from "lucide-react";
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-[#fafaf8] font-sans">
       {/* Header */}
@@ -62,10 +67,56 @@ export default function HomePage() {
           </nav>
 
           {/* Mobile menu button */}
-          <button className="flex h-10 w-10 items-center justify-center rounded-md text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6] md:hidden">
-            <Menu className="h-5 w-5" />
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex h-10 w-10 items-center justify-center rounded-md text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6] md:hidden"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="border-t border-[#f0ece6]/10 bg-[#0c1220] px-6 pb-6 pt-4 md:hidden">
+            <nav className="flex flex-col gap-4">
+              <a
+                href="#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+              >
+                Features
+              </a>
+              <a
+                href="#testimonials"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+              >
+                Testimonials
+              </a>
+              <a
+                href="#faq"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+              >
+                FAQ
+              </a>
+              <div className="flex flex-col gap-3 pt-2">
+                <Link
+                  href="/auth/login"
+                  className="rounded-md border border-[#f0ece6]/20 px-4 py-2.5 text-center text-sm font-medium text-[#f0ece6]/80 transition-all hover:border-[#f0ece6]/40 hover:text-[#f0ece6]"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/login"
+                  className="rounded-md bg-teal-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-lg shadow-teal-600/20 transition-all hover:bg-teal-500"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -558,7 +609,7 @@ export default function HomePage() {
 
           <div className="border-t border-[#f0ece6]/10 pt-8 text-center">
             <p className="text-sm text-[#f0ece6]/30">
-              &copy; 2025 PharmCall. All rights reserved.
+              &copy; 2026 PharmCall. All rights reserved.
             </p>
           </div>
         </div>
