@@ -50,6 +50,9 @@ export function AppHeader({ user }: AppHeaderProps) {
             <Link href="/dashboard" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
               Dashboard
             </Link>
+            <Link href="/patients" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
+              Patients
+            </Link>
             <Link href="/new" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
               New Call
             </Link>

@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Phone, BarChart3, History, Settings } from 'lucide-react'
+import { Phone, BarChart3, History, Settings, Users } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
+  { name: 'Patients', href: '/patients', icon: Users },
   { name: 'New Call', href: '/new', icon: Phone },
   { name: 'Call History', href: '/history', icon: History },
   { name: 'Settings', href: '/settings', icon: Settings },
