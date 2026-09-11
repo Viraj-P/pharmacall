@@ -11,10 +11,15 @@ export interface AuthUser {
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  const supabase = await createClient()
-  
+  let supabase
+  try {
+    supabase = await createClient()
+  } catch {
+    return null
+  }
+
   const { data: { user }, error } = await supabase.auth.getUser()
-  
+
   if (error || !user) {
     return null
   }

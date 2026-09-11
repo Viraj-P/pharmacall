@@ -2,6 +2,8 @@ import { AppHeader } from '@/components/app-header'
 import { AppSidebar } from '@/components/app-sidebar'
 import { getCurrentUser } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 const DEMO_USER = {
   id: 'demo-user-123',
   email: 'demo@pharmacall.com',
