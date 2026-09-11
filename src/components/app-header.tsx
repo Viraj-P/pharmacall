@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Phone } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { NotificationBell } from '@/components/notification-bell'
 
 interface AppHeaderProps {
   user: {
@@ -69,6 +70,7 @@ export function AppHeader({ user }: AppHeaderProps) {
           <div className="hidden md:block text-sm text-[#f0ece6]/60">
             {user.organization_name}
           </div>
+          <NotificationBell />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-white/10">
