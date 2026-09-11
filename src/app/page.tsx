@@ -216,6 +216,54 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="border-t border-black/[0.04] bg-white px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e]">
+              How it works
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              From setup to your first automated call in under an hour
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {[
+              {
+                step: "01",
+                title: "Connect your pharmacy",
+                description:
+                  "Import your patient list, set call hours, and configure your AI voice agent's personality and clinical protocols.",
+              },
+              {
+                step: "02",
+                title: "AI handles the calls",
+                description:
+                  "PharmCall's voice agent calls patients for refill reminders, delivery scheduling, and medication check-ins — naturally and compliantly.",
+              },
+              {
+                step: "03",
+                title: "Review and act",
+                description:
+                  "Get AI-generated summaries, sentiment analysis, and action items for every call. Escalations route directly to your pharmacists.",
+              },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <span className="mb-4 block font-serif text-5xl font-medium text-teal-600/20">
+                  {item.step}
+                </span>
+                <h3 className="mb-3 text-lg font-semibold text-[#1c1c1e]">
+                  {item.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-[#6b7280]">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section
         id="features"
