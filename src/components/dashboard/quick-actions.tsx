@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Phone, Calendar, FileText, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
+import { Phone, Calendar, FileText, AlertCircle, CheckCircle, Loader2, BarChart3, Users } from 'lucide-react'
 
 export function QuickActions() {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -17,6 +18,12 @@ export function QuickActions() {
 
   const [validationError, setValidationError] = useState('')
   const [liveTranscript, setLiveTranscript] = useState<{ speaker: 'ai' | 'patient'; text: string }[]>([])
+  const [toastMessage, setToastMessage] = useState('')
+
+  const showToast = useCallback((message: string) => {
+    setToastMessage(message)
+    setTimeout(() => setToastMessage(''), 2000)
+  }, [])
 
   const CALL_SCRIPTS: Record<string, { speaker: 'ai' | 'patient'; text: string }[]> = {
     refill_reminder: [
@@ -60,6 +67,7 @@ export function QuickActions() {
       setCallId(demoCallId)
       setCallStatus('success')
       setLoading(false)
+      showToast(`Call initiated successfully! Call ID: ${demoCallId}`)
 
       // Simulate live transcript streaming
       const script = CALL_SCRIPTS[callType] || CALL_SCRIPTS.refill_reminder
@@ -112,6 +120,13 @@ export function QuickActions() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {toastMessage && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 border border-green-200 animate-in fade-in duration-200">
+            <CheckCircle className="h-4 w-4 text-green-600 shrink-0" />
+            <span className="text-sm font-medium text-green-700">{toastMessage}</span>
+          </div>
+        )}
+
         <div className="space-y-2">
           <Label htmlFor="phone">Patient Phone Number</Label>
           <Input
@@ -268,6 +283,26 @@ export function QuickActions() {
         <div className="text-xs text-gray-500 space-y-1">
           <p><strong>Demo Mode:</strong> This simulates a real AI voice call</p>
           <p><strong>Real Implementation:</strong> Would connect to Retell AI and make actual phone calls</p>
+        </div>
+
+        <div className="border-t border-gray-100 pt-4 mt-4">
+          <p className="text-xs font-medium text-gray-500 mb-3">Quick Actions</p>
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href="/analytics"
+              className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-teal-50 hover:border-teal-200 hover:text-teal-700"
+            >
+              <BarChart3 className="h-4 w-4" />
+              View Analytics
+            </Link>
+            <Link
+              href="/patients"
+              className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-teal-50 hover:border-teal-200 hover:text-teal-700"
+            >
+              <Users className="h-4 w-4" />
+              View Patients
+            </Link>
+          </div>
         </div>
       </CardContent>
     </Card>

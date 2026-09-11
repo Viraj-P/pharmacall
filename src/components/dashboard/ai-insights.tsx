@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Brain, TrendingUp, Clock, AlertTriangle } from 'lucide-react'
 
@@ -60,6 +61,18 @@ function insightAccent(type: Insight['type']) {
 }
 
 export function AiInsights() {
+  const [mountedAt] = useState(() => Date.now())
+  const [minutesAgo, setMinutesAgo] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMinutesAgo(Math.floor((Date.now() - mountedAt) / 60000))
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [mountedAt])
+
+  const lastUpdatedLabel = minutesAgo < 1 ? 'just now' : `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+
   return (
     <Card>
       <CardHeader>
@@ -72,7 +85,7 @@ export function AiInsights() {
         {DEMO_INSIGHTS.map((insight) => (
           <div
             key={insight.label}
-            className={`rounded-lg border-l-[3px] p-3 ${insightAccent(insight.type)}`}
+            className={`rounded-lg border-l-[3px] p-3 transition-shadow duration-200 cursor-default hover:shadow-md hover:scale-[1.01] ${insightAccent(insight.type)}`}
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-xs font-medium text-gray-500">{insight.label}</span>
@@ -82,6 +95,12 @@ export function AiInsights() {
             <p className="text-xs text-gray-500 leading-relaxed">{insight.detail}</p>
           </div>
         ))}
+        <div className="pt-2 border-t border-gray-100">
+          <p className="text-[11px] text-gray-400 flex items-center gap-1.5">
+            <Clock className="h-3 w-3" />
+            Last updated: {lastUpdatedLabel}
+          </p>
+        </div>
       </CardContent>
     </Card>
   )
