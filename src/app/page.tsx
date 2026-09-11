@@ -426,6 +426,63 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section
+        id="faq"
+        className="bg-[#fafaf8] px-6 py-24"
+      >
+        <div className="mx-auto max-w-3xl">
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e] md:text-5xl">
+              Frequently asked questions
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              Everything you need to know about deploying AI voice agents in your pharmacy.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              {
+                q: "How does PharmCall handle HIPAA compliance?",
+                a: "PharmCall is built from the ground up with HIPAA compliance in mind. All patient data is encrypted at rest and in transit, we execute Business Associate Agreements (BAAs) with every client, and our infrastructure is hosted on SOC 2 Type II certified providers. Voice recordings and transcripts are stored in isolated, encrypted storage with strict access controls.",
+              },
+              {
+                q: "Can patients tell they're speaking with an AI?",
+                a: "Our voice agents use natural language processing and advanced speech synthesis to create conversations that feel human and empathetic. Most patients report a seamless experience. However, we always disclose that the call is AI-assisted at the beginning, in compliance with transparency regulations. If a patient requests a human pharmacist at any point, the call is immediately escalated.",
+              },
+              {
+                q: "How long does onboarding take?",
+                a: "Most pharmacies are fully operational within two weeks. The process includes integrating with your existing dispensing system, configuring call types and workflows, training the AI on your pharmacy's specific protocols, and a supervised pilot period where calls are monitored before going live.",
+              },
+              {
+                q: "What happens when the AI encounters a question it can't answer?",
+                a: "PharmCall uses intelligent escalation. When the AI detects a query outside its scope -- such as a clinical question requiring pharmacist judgment, an adverse reaction report, or an emotionally distressed patient -- it immediately routes the call to your on-call pharmacist with full context and transcript so they can pick up seamlessly.",
+              },
+              {
+                q: "Does PharmCall integrate with our existing pharmacy management system?",
+                a: "Yes. We support integrations with all major pharmacy dispensing and management platforms including Pioneer Rx, QS/1, Liberty, McKesson, and PioneerRx. Our API also supports custom integrations for proprietary systems. Data flows bidirectionally -- call outcomes update your records automatically.",
+              },
+            ].map((item, i) => (
+              <details
+                key={i}
+                className="group rounded-xl border border-black/[0.04] bg-white shadow-sm"
+              >
+                <summary className="flex cursor-pointer items-center justify-between p-6 text-left font-medium text-[#1c1c1e] [&::-webkit-details-marker]:hidden">
+                  <span className="text-[15px] pr-4">{item.q}</span>
+                  <span className="shrink-0 text-teal-600 transition-transform group-open:rotate-45 text-xl leading-none">+</span>
+                </summary>
+                <div className="px-6 pb-6 pt-0">
+                  <p className="text-[15px] leading-relaxed text-[#6b7280]">
+                    {item.a}
+                  </p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="relative overflow-hidden bg-[#0c1220] px-6 py-24">
         {/* Subtle mesh for depth */}
