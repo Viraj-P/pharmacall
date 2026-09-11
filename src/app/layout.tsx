@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "PharmCall — AI Voice Automation for Specialty Pharmacies",
     description: "AI-powered phone agents that handle refill calls, delivery scheduling, and patient outreach around the clock.",
+    url: "https://pharmacall-checkout.vercel.app",
     type: "website",
   },
   twitter: {
