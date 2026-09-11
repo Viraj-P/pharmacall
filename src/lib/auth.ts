@@ -11,6 +11,11 @@ export interface AuthUser {
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
+  // Return null early if Supabase isn't configured — avoids throwing during SSR
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return null
+  }
+
   let supabase
   try {
     supabase = await createClient()
@@ -76,6 +81,9 @@ export async function requireRole(requiredRole: UserRole): Promise<AuthUser> {
 }
 
 export async function signOut() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    redirect('/')
+  }
   const supabase = await createClient()
   await supabase.auth.signOut()
   redirect('/auth/login')
