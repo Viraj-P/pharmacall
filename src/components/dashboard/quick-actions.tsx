@@ -15,11 +15,14 @@ export function QuickActions() {
   const [callStatus, setCallStatus] = useState<'idle' | 'initiating' | 'success' | 'error'>('idle')
   const [callId, setCallId] = useState('')
 
+  const [validationError, setValidationError] = useState('')
+
   const handleInitiateCall = async () => {
     if (!phoneNumber || !callType) {
-      alert('Please fill in all fields')
+      setValidationError('Please fill in all fields')
       return
     }
+    setValidationError('')
 
     setLoading(true)
     setCallStatus('initiating')
@@ -135,6 +138,13 @@ export function QuickActions() {
             </SelectContent>
           </Select>
         </div>
+
+        {validationError && (
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <span className="text-sm font-medium text-red-600">{validationError}</span>
+          </div>
+        )}
 
         {statusInfo && (
           <div className={`flex items-center gap-2 p-3 rounded-lg ${

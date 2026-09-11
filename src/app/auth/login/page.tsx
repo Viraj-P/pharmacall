@@ -130,15 +130,6 @@ export default function LoginPage() {
                   </Button>
                 </form>
 
-                <div className="mb-8 text-center">
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-teal-600 transition-colors hover:text-teal-700"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-
                 <div className="border-t border-gray-200 pt-8 text-center">
                   <div className="mb-4 text-sm text-gray-500">
                     Want to try the demo?

@@ -1,10 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Phone } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 interface AppHeaderProps {
   user: {
@@ -17,9 +19,14 @@ interface AppHeaderProps {
 
 export function AppHeader({ user }: AppHeaderProps) {
   const router = useRouter()
+  const supabase = createClient()
 
   const handleSignOut = async () => {
-    // For demo, just redirect to home
+    try {
+      await supabase.auth.signOut()
+    } catch {
+      // Sign out failed, still redirect
+    }
     router.push('/')
   }
 
@@ -38,7 +45,16 @@ export function AppHeader({ user }: AppHeaderProps) {
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="text-sm text-[#f0ece6]/60">
+          {/* Mobile nav links */}
+          <nav className="flex md:hidden items-center space-x-1">
+            <Link href="/dashboard" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
+              Dashboard
+            </Link>
+            <Link href="/new" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
+              New Call
+            </Link>
+          </nav>
+          <div className="hidden md:block text-sm text-[#f0ece6]/60">
             {user.organization_name}
           </div>
           <DropdownMenu>

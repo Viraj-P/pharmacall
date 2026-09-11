@@ -19,55 +19,58 @@ export function RecentCalls() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate API call with demo data
+    const DEMO_CALLS: Call[] = [
+      {
+        id: 'call_001',
+        patient_phone: '(555) 123-4567',
+        call_type: 'delivery_scheduling',
+        status: 'completed',
+        created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+        duration_seconds: 180
+      },
+      {
+        id: 'call_002',
+        patient_phone: '(555) 234-5678',
+        call_type: 'medication_change',
+        status: 'completed',
+        created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+        duration_seconds: 240
+      },
+      {
+        id: 'call_003',
+        patient_phone: '(555) 345-6789',
+        call_type: 'general_inquiry',
+        status: 'in_progress',
+        created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+      },
+      {
+        id: 'call_004',
+        patient_phone: '(555) 456-7890',
+        call_type: 'shipment_feedback',
+        status: 'completed',
+        created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
+        duration_seconds: 120
+      },
+      {
+        id: 'call_005',
+        patient_phone: '(555) 567-8901',
+        call_type: 'delivery_scheduling',
+        status: 'failed',
+        created_at: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+      }
+    ]
+
     const fetchCalls = async () => {
       try {
-        // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 800))
-        
-        // Demo data
-        setCalls([
-          {
-            id: 'call_001',
-            patient_phone: '(555) 123-4567',
-            call_type: 'delivery_scheduling',
-            status: 'completed',
-            created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
-            duration_seconds: 180
-          },
-          {
-            id: 'call_002',
-            patient_phone: '(555) 234-5678',
-            call_type: 'medication_change',
-            status: 'completed',
-            created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
-            duration_seconds: 240
-          },
-          {
-            id: 'call_003',
-            patient_phone: '(555) 345-6789',
-            call_type: 'general_inquiry',
-            status: 'in_progress',
-            created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 minutes ago
-          },
-          {
-            id: 'call_004',
-            patient_phone: '(555) 456-7890',
-            call_type: 'shipment_feedback',
-            status: 'completed',
-            created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(), // 4 hours ago
-            duration_seconds: 120
-          },
-          {
-            id: 'call_005',
-            patient_phone: '(555) 567-8901',
-            call_type: 'delivery_scheduling',
-            status: 'failed',
-            created_at: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(), // 6 hours ago
-          }
-        ])
-      } catch (error) {
-        console.error('Failed to fetch calls:', error)
+        const res = await fetch('/api/calls')
+        if (res.ok) {
+          const data = await res.json()
+          setCalls(data.length > 0 ? data : DEMO_CALLS)
+        } else {
+          setCalls(DEMO_CALLS)
+        }
+      } catch {
+        setCalls(DEMO_CALLS)
       } finally {
         setLoading(false)
       }
