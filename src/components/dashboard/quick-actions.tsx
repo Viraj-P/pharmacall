@@ -16,6 +16,31 @@ export function QuickActions() {
   const [callId, setCallId] = useState('')
 
   const [validationError, setValidationError] = useState('')
+  const [liveTranscript, setLiveTranscript] = useState<{ speaker: 'ai' | 'patient'; text: string }[]>([])
+
+  const CALL_SCRIPTS: Record<string, { speaker: 'ai' | 'patient'; text: string }[]> = {
+    refill_reminder: [
+      { speaker: 'ai', text: 'Hi, this is a call from your pharmacy. Am I speaking with the patient?' },
+      { speaker: 'patient', text: 'Yes, that\'s me.' },
+      { speaker: 'ai', text: 'I\'m calling about your prescription that\'s coming up for a refill. Would you like us to prepare it?' },
+      { speaker: 'patient', text: 'Yes, please go ahead.' },
+      { speaker: 'ai', text: 'Great, it\'ll be ready for pickup tomorrow after 2 PM. Have a good day!' },
+    ],
+    delivery_scheduling: [
+      { speaker: 'ai', text: 'Hi, this is your pharmacy calling about your upcoming medication delivery.' },
+      { speaker: 'patient', text: 'Oh yes, I was expecting your call.' },
+      { speaker: 'ai', text: 'We have your prescription ready. Would Thursday or Friday work better for delivery?' },
+      { speaker: 'patient', text: 'Thursday afternoon would be perfect.' },
+      { speaker: 'ai', text: 'Thursday afternoon it is. You\'ll get a text with the delivery window. Thanks!' },
+    ],
+    side_effect_check: [
+      { speaker: 'ai', text: 'Hi, I\'m calling from your pharmacy to check in on your new medication.' },
+      { speaker: 'patient', text: 'Hi, yes. I started it last week.' },
+      { speaker: 'ai', text: 'How have you been feeling? Any side effects or concerns?' },
+      { speaker: 'patient', text: 'A bit of nausea the first few days, but it\'s better now.' },
+      { speaker: 'ai', text: 'That\'s common and usually resolves. If it returns, contact your pharmacist. Take care!' },
+    ],
+  }
 
   const handleInitiateCall = async () => {
     if (!phoneNumber || !callType) {
@@ -26,33 +51,28 @@ export function QuickActions() {
 
     setLoading(true)
     setCallStatus('initiating')
-    
+    setLiveTranscript([])
+
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Generate a demo call ID
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
       const demoCallId = `call_${Date.now()}`
       setCallId(demoCallId)
-      
-      // Simulate successful call initiation
       setCallStatus('success')
-      
-      // Reset form after success
-      setTimeout(() => {
-        setPhoneNumber('')
-        setCallType('')
-        setCallStatus('idle')
-        setCallId('')
-      }, 3000)
-      
-    } catch (error) {
-      setCallStatus('error')
-      setTimeout(() => {
-        setCallStatus('idle')
-      }, 3000)
-    } finally {
       setLoading(false)
+
+      // Simulate live transcript streaming
+      const script = CALL_SCRIPTS[callType] || CALL_SCRIPTS.refill_reminder
+      for (let i = 0; i < script.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800))
+        setLiveTranscript(prev => [...prev, script[i]])
+      }
+    } catch {
+      setCallStatus('error')
+      setLoading(false)
+      setTimeout(() => {
+        setCallStatus('idle')
+      }, 3000)
     }
   }
 
@@ -200,6 +220,50 @@ export function QuickActions() {
             </>
           )}
         </Button>
+
+        {/* Live Transcript */}
+        {callStatus === 'success' && liveTranscript.length > 0 && (
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-100">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-xs font-semibold text-gray-600">Live Transcript</span>
+              <span className="text-xs text-gray-400 ml-auto">Call ID: {callId}</span>
+            </div>
+            <div className="p-3 space-y-2.5 max-h-60 overflow-y-auto">
+              {liveTranscript.map((msg, i) => (
+                <div key={i} className={`flex gap-2 ${msg.speaker === 'patient' ? 'flex-row-reverse' : ''}`}>
+                  <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-semibold ${
+                    msg.speaker === 'ai' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {msg.speaker === 'ai' ? 'AI' : 'P'}
+                  </div>
+                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-xs leading-relaxed ${
+                    msg.speaker === 'ai'
+                      ? 'rounded-tl-sm bg-teal-50 text-teal-900'
+                      : 'rounded-tr-sm bg-gray-50 text-gray-800'
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="px-3 py-2 border-t border-gray-100 flex justify-between items-center">
+              <span className="text-[10px] text-gray-400">Demo simulation</span>
+              <button
+                onClick={() => {
+                  setPhoneNumber('')
+                  setCallType('')
+                  setCallStatus('idle')
+                  setCallId('')
+                  setLiveTranscript([])
+                }}
+                className="text-xs font-medium text-teal-600 hover:text-teal-700 cursor-pointer"
+              >
+                New Call
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="text-xs text-gray-500 space-y-1">
           <p><strong>Demo Mode:</strong> This simulates a real AI voice call</p>
