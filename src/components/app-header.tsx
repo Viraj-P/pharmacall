@@ -56,6 +56,9 @@ export function AppHeader({ user }: AppHeaderProps) {
             <Link href="/history" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
               History
             </Link>
+            <Link href="/settings" className="px-3 py-1.5 text-sm font-medium text-[#f0ece6]/70 hover:text-[#f0ece6] rounded-md hover:bg-white/10 transition-colors">
+              Settings
+            </Link>
           </nav>
           <div className="hidden md:block text-sm text-[#f0ece6]/60">
             {user.organization_name}
