@@ -6,6 +6,7 @@ import {
   ArrowRight,
   CheckCircle,
   Shield,
+  Lock,
   Clock,
   Phone,
   MessageSquare,
@@ -14,6 +15,7 @@ import {
   LifeBuoy,
   Menu,
   X,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -225,6 +227,32 @@ export default function HomePage() {
                 AI availability
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trusted By Section - Logo Cloud */}
+      <section className="bg-[#fafaf8] px-6 py-16">
+        <div className="mx-auto max-w-[1200px]">
+          <p className="mb-10 text-center text-sm font-medium uppercase tracking-widest text-[#9ca3af]">
+            Trusted by leading pharmacies
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 md:gap-x-16">
+            {[
+              "Memorial Health System",
+              "Valley Specialty Rx",
+              "CureWell Pharmacy",
+              "Pacific Care Group",
+              "Ascend Health",
+              "Cornerstone Rx",
+            ].map((name) => (
+              <span
+                key={name}
+                className="whitespace-nowrap text-lg font-semibold tracking-tight text-[#c0c0c0] md:text-xl"
+              >
+                {name}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -718,6 +746,64 @@ export default function HomePage() {
                 Contact Sales
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Compliance & Security Section */}
+      <section className="border-t border-black/[0.04] bg-[#fafaf8] px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e] md:text-5xl">
+              Compliance &amp; Security
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              Enterprise-grade safeguards so you can automate with confidence.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: Shield,
+                title: "HIPAA Compliant",
+                description:
+                  "Full administrative, physical, and technical safeguards for protected health information.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "SOC 2 Type II",
+                description:
+                  "Independently audited controls for security, availability, and confidentiality.",
+              },
+              {
+                icon: Lock,
+                title: "256-bit Encryption",
+                description:
+                  "AES-256 encryption for all data at rest and TLS 1.3 for every transmission.",
+              },
+              {
+                icon: CheckCircle,
+                title: "BAA Included",
+                description:
+                  "Business Associate Agreements executed with every client at no additional cost.",
+              },
+            ].map((badge) => (
+              <div
+                key={badge.title}
+                className="flex flex-col items-center rounded-xl border border-black/[0.04] bg-white p-8 text-center shadow-sm"
+              >
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-teal-600/10">
+                  <badge.icon className="h-6 w-6 text-teal-600" />
+                </div>
+                <h3 className="mb-2 text-base font-semibold text-[#1c1c1e]">
+                  {badge.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-[#6b7280]">
+                  {badge.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
