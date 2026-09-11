@@ -5,6 +5,7 @@ import { QuickActions } from '@/components/dashboard/quick-actions'
 import { CallAnalytics } from '@/components/dashboard/call-analytics'
 import { AiInsights } from '@/components/dashboard/ai-insights'
 import { TodaysSchedule } from '@/components/dashboard/todays-schedule'
+import { LiveActivity } from '@/components/dashboard/live-activity'
 
 export default async function DashboardPage() {
   let user = null
@@ -14,6 +15,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      <LiveActivity />
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600">Welcome back, {displayEmail}</p>
