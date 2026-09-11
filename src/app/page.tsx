@@ -935,6 +935,15 @@ export default function HomePage() {
           <div className="border-t border-[#f0ece6]/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-[#f0ece6]/30">
               Built by Viraj
+              <span className="mx-2 opacity-40">&middot;</span>
+              <a
+                href="https://github.com/Viraj-P/pharmacall"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#f0ece6]/30 hover:text-[#f0ece6]/60 transition-colors"
+              >
+                View Source
+              </a>
             </p>
             <p className="text-sm text-[#f0ece6]/30">
               Powered by Claude AI
