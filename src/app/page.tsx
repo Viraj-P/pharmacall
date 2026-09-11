@@ -52,6 +52,12 @@ export default function HomePage() {
             >
               FAQ
             </a>
+            <a
+              href="#pricing"
+              className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+            >
+              Pricing
+            </a>
             <Link
               href="/auth/login"
               className="rounded-md border border-[#f0ece6]/20 px-4 py-2 text-sm font-medium text-[#f0ece6]/80 transition-all hover:border-[#f0ece6]/40 hover:text-[#f0ece6]"
@@ -99,6 +105,13 @@ export default function HomePage() {
                 className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
               >
                 FAQ
+              </a>
+              <a
+                href="#pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-sm font-medium text-[#f0ece6]/70 transition-colors hover:text-[#f0ece6]"
+              >
+                Pricing
               </a>
               <div className="flex flex-col gap-3 pt-2">
                 <Link
@@ -606,6 +619,105 @@ export default function HomePage() {
                 </div>
               </details>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section
+        id="pricing"
+        className="border-t border-black/[0.04] bg-white px-6 py-24"
+      >
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mx-auto mb-16 max-w-2xl text-center">
+            <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e] md:text-5xl">
+              Simple, transparent pricing
+            </h2>
+            <p className="text-lg leading-relaxed text-[#6b7280]">
+              Pay for the calls you make. No setup fees, no per-seat charges, no surprises.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {/* Starter */}
+            <div className="rounded-2xl border border-black/[0.04] bg-[#fafaf8] p-8 flex flex-col">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-[#1c1c1e] mb-1">Starter</h3>
+                <p className="text-sm text-[#6b7280]">For independent pharmacies</p>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-bold tracking-tight text-[#1c1c1e]">$299</span>
+                <span className="text-sm text-[#6b7280]">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8 flex-1">
+                {["Up to 500 calls/month", "2 call types", "Email support", "Basic analytics dashboard", "HIPAA-compliant storage"].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[#4b5563]">
+                    <CheckCircle className="h-4 w-4 mt-0.5 shrink-0 text-teal-600" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/auth/login"
+                className="block rounded-lg border border-teal-600 px-6 py-3 text-center text-sm font-semibold text-teal-600 transition-all hover:bg-teal-50"
+              >
+                Start Free Trial
+              </Link>
+            </div>
+
+            {/* Professional */}
+            <div className="rounded-2xl border-2 border-teal-600 bg-white p-8 flex flex-col relative shadow-xl shadow-teal-600/10">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-teal-600 px-3 py-1 text-xs font-semibold text-white">
+                Most Popular
+              </div>
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-[#1c1c1e] mb-1">Professional</h3>
+                <p className="text-sm text-[#6b7280]">For growing specialty pharmacies</p>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-bold tracking-tight text-[#1c1c1e]">$799</span>
+                <span className="text-sm text-[#6b7280]">/month</span>
+              </div>
+              <ul className="space-y-3 mb-8 flex-1">
+                {["Up to 2,000 calls/month", "All 6 call types", "Priority support + Slack channel", "Advanced analytics + AI insights", "PMS integration (Pioneer Rx, QS/1)", "Custom voice agent personality"].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[#4b5563]">
+                    <CheckCircle className="h-4 w-4 mt-0.5 shrink-0 text-teal-600" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/auth/login"
+                className="block rounded-lg bg-teal-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-teal-600/20 transition-all hover:bg-teal-500"
+              >
+                Start Free Trial
+              </Link>
+            </div>
+
+            {/* Enterprise */}
+            <div className="rounded-2xl border border-black/[0.04] bg-[#fafaf8] p-8 flex flex-col">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-[#1c1c1e] mb-1">Enterprise</h3>
+                <p className="text-sm text-[#6b7280]">For pharmacy networks + health systems</p>
+              </div>
+              <div className="mb-6">
+                <span className="text-4xl font-bold tracking-tight text-[#1c1c1e]">Custom</span>
+              </div>
+              <ul className="space-y-3 mb-8 flex-1">
+                {["Unlimited calls", "Custom call workflows", "Dedicated success manager", "White-label voice agents", "SOC 2 Type II + BAA", "SLA guarantee (99.99%)", "Multi-location management"].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm text-[#4b5563]">
+                    <CheckCircle className="h-4 w-4 mt-0.5 shrink-0 text-teal-600" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/auth/login"
+                className="block rounded-lg border border-teal-600 px-6 py-3 text-center text-sm font-semibold text-teal-600 transition-all hover:bg-teal-50"
+              >
+                Contact Sales
+              </Link>
+            </div>
           </div>
         </div>
       </section>
