@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
   Phone, Clock, CheckCircle, XCircle, ChevronDown, ChevronUp,
-  MessageSquare, FileText, AlertTriangle, Search, Filter,
+  MessageSquare, FileText, AlertTriangle, Search, Filter, Download,
 } from 'lucide-react'
 
 interface CallDetail {
@@ -242,11 +242,33 @@ export function CallHistoryTable() {
         </div>
       </div>
 
-      {/* Results count */}
-      <p className="text-xs text-gray-500">
-        {filteredCalls.length} call{filteredCalls.length !== 1 ? 's' : ''}
-        {statusFilter !== 'all' && ` (${statusFilter.replace('_', ' ')})`}
-      </p>
+      {/* Results count + export */}
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-gray-500">
+          {filteredCalls.length} call{filteredCalls.length !== 1 ? 's' : ''}
+          {statusFilter !== 'all' && ` (${statusFilter.replace('_', ' ')})`}
+        </p>
+        <button
+          onClick={() => {
+            const header = 'Call ID,Phone,Type,Status,Date,Duration,Summary\n'
+            const rows = filteredCalls.map(c => {
+              const summary = c.detail?.ai_summary?.replace(/"/g, '""') || ''
+              return `"${c.id}","${c.patient_phone}","${formatCallType(c.call_type)}","${c.status}","${new Date(c.created_at).toISOString()}","${formatDuration(c.duration_seconds)}","${summary}"`
+            }).join('\n')
+            const blob = new Blob([header + rows], { type: 'text/csv' })
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = `pharmacall-history-${new Date().toISOString().split('T')[0]}.csv`
+            a.click()
+            URL.revokeObjectURL(url)
+          }}
+          className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-teal-600 transition-colors cursor-pointer"
+        >
+          <Download className="h-3.5 w-3.5" />
+          Export CSV
+        </button>
+      </div>
 
       {/* Call list */}
       <Card>
