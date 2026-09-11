@@ -607,9 +607,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="border-t border-[#f0ece6]/10 pt-8 text-center">
+          <div className="border-t border-[#f0ece6]/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-[#f0ece6]/30">
-              &copy; 2026 PharmCall. All rights reserved.
+              Built by Viraj
+            </p>
+            <p className="text-sm text-[#f0ece6]/30">
+              Powered by Claude AI
             </p>
           </div>
         </div>
