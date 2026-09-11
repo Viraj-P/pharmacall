@@ -33,6 +33,40 @@ function Trend({ value, direction, positive = true }: TrendProps) {
   )
 }
 
+function Sparkline({ data, color = '#0d9488' }: { data: number[]; color?: string }) {
+  const max = Math.max(...data)
+  const min = Math.min(...data)
+  const range = max - min || 1
+  const w = 80
+  const h = 24
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w
+    const y = h - ((v - min) / range) * (h - 4) - 2
+    return `${x},${y}`
+  }).join(' ')
+
+  return (
+    <svg width={w} height={h} className="shrink-0">
+      <polyline
+        points={points}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+// 7-day sparkline data for each stat
+const SPARKLINES = {
+  total: [156, 172, 168, 185, 190, 178, 198],
+  completed: [148, 165, 160, 178, 182, 171, 189],
+  pending: [18, 14, 16, 12, 10, 15, 12],
+  success: [93, 94, 94, 95, 96, 95, 95],
+}
+
 export function DashboardStats() {
   const [stats, setStats] = useState<DashboardStats>({
     total_calls: 0,
@@ -102,8 +136,13 @@ export function DashboardStats() {
           <Phone className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.total_calls.toLocaleString()}</div>
-          <Trend value="12%" direction="up" />
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-2xl font-bold">{stats.total_calls.toLocaleString()}</div>
+              <Trend value="12%" direction="up" />
+            </div>
+            <Sparkline data={SPARKLINES.total} />
+          </div>
         </CardContent>
       </Card>
 
@@ -113,8 +152,13 @@ export function DashboardStats() {
           <CheckCircle className="h-4 w-4 text-green-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.completed_calls.toLocaleString()}</div>
-          <Trend value="8%" direction="up" />
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-2xl font-bold">{stats.completed_calls.toLocaleString()}</div>
+              <Trend value="8%" direction="up" />
+            </div>
+            <Sparkline data={SPARKLINES.completed} color="#16a34a" />
+          </div>
         </CardContent>
       </Card>
 
@@ -124,8 +168,13 @@ export function DashboardStats() {
           <Clock className="h-4 w-4 text-yellow-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.pending_calls}</div>
-          <Trend value="20%" direction="down" positive={false} />
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-2xl font-bold">{stats.pending_calls}</div>
+              <Trend value="20%" direction="down" positive={false} />
+            </div>
+            <Sparkline data={SPARKLINES.pending} color="#ca8a04" />
+          </div>
         </CardContent>
       </Card>
 
@@ -135,8 +184,13 @@ export function DashboardStats() {
           <TrendingUp className="h-4 w-4 text-teal-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.success_rate}%</div>
-          <Trend value="2pp" direction="up" />
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-2xl font-bold">{stats.success_rate}%</div>
+              <Trend value="2pp" direction="up" />
+            </div>
+            <Sparkline data={SPARKLINES.success} />
+          </div>
         </CardContent>
       </Card>
     </div>
