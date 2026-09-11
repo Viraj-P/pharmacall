@@ -555,110 +555,53 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/auth/login"
                     className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
                   >
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#faq"
                     className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
                   >
-                    Security
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
-                  >
-                    Pricing
+                    FAQ
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Support column */}
+            {/* Resources column */}
             <div>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#f0ece6]/60">
-                Support
+                Resources
               </h3>
               <ul className="space-y-3">
                 <li>
                   <a
-                    href="#"
+                    href="#testimonials"
                     className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
                   >
-                    Documentation
+                    Testimonials
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
-                  >
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
-                  >
-                    Contact Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
-                  >
-                    Status
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Legal column */}
-            <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#f0ece6]/60">
-                Legal
-              </h3>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="#"
-                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
-                  >
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
-                  >
-                    Terms of Service
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
+                    href="#faq"
                     className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
                   >
                     HIPAA Compliance
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/auth/login"
                     className="text-sm text-[#f0ece6]/40 transition-colors hover:text-[#f0ece6]/70"
                   >
-                    BAA
-                  </a>
+                    Contact Sales
+                  </Link>
                 </li>
               </ul>
             </div>
