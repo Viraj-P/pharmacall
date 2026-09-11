@@ -42,11 +42,6 @@ export default function LoginPage() {
     }
   }
 
-  const handleDemoLogin = () => {
-    // For demo purposes, redirect directly to dashboard
-    router.push('/dashboard')
-  }
-
   return (
     <div className="min-h-screen bg-[#fafaf8] font-sans">
       <div className="mx-auto max-w-[1200px] px-6 py-8">
@@ -130,16 +125,23 @@ export default function LoginPage() {
                   </Button>
                 </form>
 
-                <div className="border-t border-gray-200 pt-8 text-center">
-                  <div className="mb-4 text-sm text-gray-500">
-                    Want to try the demo?
+                <div className="pt-6 text-center">
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200" />
+                    </div>
+                    <div className="relative flex justify-center">
+                      <span className="bg-white px-4 text-sm text-gray-500">
+                        Or continue without account
+                      </span>
+                    </div>
                   </div>
-                  <Button
-                    onClick={handleDemoLogin}
-                    className="w-full rounded-xl bg-emerald-600 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 hover:shadow-emerald-700/25"
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex w-full items-center justify-center rounded-xl border-2 border-teal-600 bg-white py-3 text-base font-semibold text-teal-600 shadow-sm transition-all hover:bg-teal-50 hover:shadow-md"
                   >
                     Try Demo Dashboard
-                  </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
