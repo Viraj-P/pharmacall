@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TrendingUp } from 'lucide-react'
 
@@ -20,6 +21,7 @@ const DEMO_ANALYTICS: DayData[] = [
 ]
 
 export function CallAnalytics() {
+  const [hoveredDay, setHoveredDay] = useState<string | null>(null)
   const data = DEMO_ANALYTICS
   const maxCalls = Math.max(...data.map(d => d.calls))
   const totalCalls = data.reduce((sum, d) => sum + d.calls, 0)
@@ -68,23 +70,49 @@ export function CallAnalytics() {
           {data.map((day) => {
             const totalHeight = (day.calls / maxCalls) * 100
             const completedHeight = (day.completed / maxCalls) * 100
+            const isHovered = hoveredDay === day.label
+            const failedCalls = day.calls - day.completed
 
             return (
-              <div key={day.label} className="flex-1 flex flex-col items-center gap-1">
-                <span className="text-xs font-medium text-gray-600">{day.calls}</span>
-                <div className="w-full relative" style={{ height: '120px' }}>
+              <div
+                key={day.label}
+                className="flex-1 flex flex-col items-center gap-1 relative group"
+                onMouseEnter={() => setHoveredDay(day.label)}
+                onMouseLeave={() => setHoveredDay(null)}
+              >
+                <span className={`text-xs font-medium transition-colors ${isHovered ? 'text-teal-600' : 'text-gray-600'}`}>{day.calls}</span>
+                <div className="w-full relative cursor-pointer" style={{ height: '120px' }}>
                   {/* Total bar (background) */}
                   <div
-                    className="absolute bottom-0 w-full rounded-t-md bg-teal-100 transition-all duration-500 ease-out"
+                    className={`absolute bottom-0 w-full rounded-t-md transition-all duration-300 ease-out ${isHovered ? 'bg-teal-200' : 'bg-teal-100'}`}
                     style={{ height: `${totalHeight}%` }}
                   />
                   {/* Completed bar (foreground) */}
                   <div
-                    className="absolute bottom-0 w-full rounded-t-md bg-teal-500 transition-all duration-500 ease-out"
+                    className={`absolute bottom-0 w-full rounded-t-md transition-all duration-300 ease-out ${isHovered ? 'bg-teal-600' : 'bg-teal-500'}`}
                     style={{ height: `${completedHeight}%` }}
                   />
+
+                  {/* Tooltip */}
+                  {isHovered && (
+                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 z-10 bg-gray-900 text-white rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-lg">
+                      <div className="font-semibold mb-1">{day.label}</div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-400" />
+                        {day.completed} completed
+                      </div>
+                      {failedCalls > 0 && (
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                          {failedCalls} pending/failed
+                        </div>
+                      )}
+                      <div className="mt-1 text-gray-400">{Math.round((day.completed / day.calls) * 100)}% success</div>
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900" />
+                    </div>
+                  )}
                 </div>
-                <span className="text-xs text-gray-400">{day.label}</span>
+                <span className={`text-xs transition-colors ${isHovered ? 'text-teal-600 font-medium' : 'text-gray-400'}`}>{day.label}</span>
               </div>
             )
           })}
