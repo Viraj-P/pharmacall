@@ -1,4 +1,6 @@
-# 🏥 Pharmacy Voice Automation
+# PharmCall
+
+**[Live Demo](https://pharmacall-checkout.vercel.app)**
 
 AI-powered voice call automation platform for specialty pharmacies with HIPAA compliance and multi-tenant architecture.
 
