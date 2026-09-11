@@ -217,7 +217,7 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="border-t border-black/[0.04] bg-white px-6 py-24">
+      <section id="how-it-works" className="border-t border-black/[0.04] bg-white px-6 py-24">
         <div className="mx-auto max-w-[1200px]">
           <div className="mx-auto mb-16 max-w-2xl text-center">
             <h2 className="mb-4 font-serif text-4xl tracking-tight text-[#1c1c1e]">

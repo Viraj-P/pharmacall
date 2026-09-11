@@ -4,6 +4,7 @@ import { RecentCalls } from '@/components/dashboard/recent-calls'
 import { QuickActions } from '@/components/dashboard/quick-actions'
 import { CallAnalytics } from '@/components/dashboard/call-analytics'
 import { AiInsights } from '@/components/dashboard/ai-insights'
+import { TodaysSchedule } from '@/components/dashboard/todays-schedule'
 
 export default async function DashboardPage() {
   let user = null
@@ -31,8 +32,9 @@ export default async function DashboardPage() {
         <AiInsights />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <RecentCalls />
+        <TodaysSchedule />
         <QuickActions />
       </div>
     </div>
