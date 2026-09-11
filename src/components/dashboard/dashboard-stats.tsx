@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Phone, CheckCircle, Clock, TrendingUp } from 'lucide-react'
+import { Phone, CheckCircle, Clock, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 
 interface DashboardStats {
   total_calls: number
@@ -10,6 +10,27 @@ interface DashboardStats {
   pending_calls: number
   success_rate: number
   avg_duration: number
+}
+
+interface TrendProps {
+  value: string
+  direction: 'up' | 'down'
+  positive?: boolean
+}
+
+function Trend({ value, direction, positive = true }: TrendProps) {
+  const isGood = (direction === 'up' && positive) || (direction === 'down' && !positive)
+  return (
+    <div className={`flex items-center gap-0.5 text-xs font-medium ${isGood ? 'text-green-600' : 'text-red-500'}`}>
+      {direction === 'up' ? (
+        <ArrowUpRight className="h-3.5 w-3.5" />
+      ) : (
+        <ArrowDownRight className="h-3.5 w-3.5" />
+      )}
+      <span>{value}</span>
+      <span className="text-muted-foreground font-normal ml-1">vs last month</span>
+    </div>
+  )
 }
 
 export function DashboardStats() {
@@ -30,7 +51,6 @@ export function DashboardStats() {
           const data = await res.json()
           setStats(data)
         } else {
-          // Fall back to demo data when not authenticated
           setStats({
             total_calls: 1247,
             completed_calls: 1189,
@@ -65,7 +85,8 @@ export function DashboardStats() {
               <div className="h-4 w-4 bg-gray-200 rounded"></div>
             </CardHeader>
             <CardContent>
-              <div className="h-8 bg-gray-200 rounded w-16"></div>
+              <div className="h-8 bg-gray-200 rounded w-16 mb-2"></div>
+              <div className="h-3 bg-gray-200 rounded w-28"></div>
             </CardContent>
           </Card>
         ))}
@@ -82,9 +103,7 @@ export function DashboardStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.total_calls.toLocaleString()}</div>
-          <p className="text-xs text-muted-foreground">
-            +12% from last month
-          </p>
+          <Trend value="12%" direction="up" />
         </CardContent>
       </Card>
 
@@ -95,9 +114,7 @@ export function DashboardStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.completed_calls.toLocaleString()}</div>
-          <p className="text-xs text-muted-foreground">
-            +8% from last month
-          </p>
+          <Trend value="8%" direction="up" />
         </CardContent>
       </Card>
 
@@ -108,9 +125,7 @@ export function DashboardStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.pending_calls}</div>
-          <p className="text-xs text-muted-foreground">
-            -3 from yesterday
-          </p>
+          <Trend value="20%" direction="down" positive={false} />
         </CardContent>
       </Card>
 
@@ -121,9 +136,7 @@ export function DashboardStats() {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.success_rate}%</div>
-          <p className="text-xs text-muted-foreground">
-            +2% from last month
-          </p>
+          <Trend value="2pp" direction="up" />
         </CardContent>
       </Card>
     </div>
